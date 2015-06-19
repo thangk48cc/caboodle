@@ -19,9 +19,7 @@ class Login {
     
     // popup the login alert
     func challenge() {
-    
-        Rest.session = nil;
-        
+            
         let alertController = UIAlertController(title: "Welcome to Chat", message: "Enter your credentials", preferredStyle: .Alert)
         
         func userInput() -> (username:String, password:String) {

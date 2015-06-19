@@ -16,7 +16,7 @@
 		05DBDC641B33C06400320FCA /* Rest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DBDC601B33C06400320FCA /* Rest.swift */; };
 		05DBDC651B33C06400320FCA /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DBDC611B33C06400320FCA /* Login.swift */; };
 		05DBDC661B33C06400320FCA /* Http.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DBDC621B33C06400320FCA /* Http.swift */; };
-		05DBDC671B33C06400320FCA /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DBDC631B33C06400320FCA /* Contact.swift */; };
+		05F39F291B33C1C70065E6A7 /* Roster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F39F281B33C1C70065E6A7 /* Roster.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,7 +31,7 @@
 		05DBDC601B33C06400320FCA /* Rest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rest.swift; sourceTree = "<group>"; };
 		05DBDC611B33C06400320FCA /* Login.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		05DBDC621B33C06400320FCA /* Http.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Http.swift; sourceTree = "<group>"; };
-		05DBDC631B33C06400320FCA /* Contact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
+		05F39F281B33C1C70065E6A7 /* Roster.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Roster.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,8 +69,8 @@
 				05DBDC501B33C00300320FCA /* DetailViewController.swift */,
 				05DBDC601B33C06400320FCA /* Rest.swift */,
 				05DBDC611B33C06400320FCA /* Login.swift */,
+				05F39F281B33C1C70065E6A7 /* Roster.swift */,
 				05DBDC621B33C06400320FCA /* Http.swift */,
-				05DBDC631B33C06400320FCA /* Contact.swift */,
 				05DBDC521B33C00300320FCA /* Main.storyboard */,
 				05DBDC551B33C00300320FCA /* Assets.xcassets */,
 				05DBDC571B33C00300320FCA /* LaunchScreen.storyboard */,
@@ -153,9 +153,9 @@
 				05DBDC651B33C06400320FCA /* Login.swift in Sources */,
 				05DBDC4F1B33C00300320FCA /* MasterViewController.swift in Sources */,
 				05DBDC4D1B33C00300320FCA /* AppDelegate.swift in Sources */,
+				05F39F291B33C1C70065E6A7 /* Roster.swift in Sources */,
 				05DBDC641B33C06400320FCA /* Rest.swift in Sources */,
 				05DBDC661B33C06400320FCA /* Http.swift in Sources */,
-				05DBDC671B33C06400320FCA /* Contact.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,6 +305,7 @@
 				05DBDC5F1B33C00300320FCA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
