@@ -23,10 +23,10 @@ class Rest {
         })
     }
     
-    func getRoster(callback:(contacts:[String]?) -> Void) {
-        HttpHelper.post(nil, url:serverAddress+"roster/"+Rest.session!, callback:{
+    func getRoster(callback:(contacts:[String:[[String:String]]]?) -> Void) {
+        HttpHelper.get(nil, url:serverAddress+"roster" /*+Rest.session!*/, callback:{
             if $0 == 200 {
-                let response = $1 as! [String]
+                let response = $1 as! [String:[[String:String]]]
                 callback(contacts: response)
             } else {
                 callback(contacts: nil)

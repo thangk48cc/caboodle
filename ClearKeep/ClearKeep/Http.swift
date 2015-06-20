@@ -33,7 +33,6 @@ class HttpHelper {
 
             // parse the response
             print("Response: \(response)")
-//            if response != nil
             let statusCode = (response as! NSHTTPURLResponse).statusCode;
             if statusCode != 200 {
                 callback(status:statusCode, response:nil);

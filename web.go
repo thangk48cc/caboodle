@@ -2,9 +2,7 @@ package main
 
 import (
     "io"
-//    "io/ioutil"
     "fmt"
-//    "log"
     "net/http"
     "encoding/json"
 )
@@ -20,6 +18,15 @@ type Credential struct {
 
 type Session struct {
     Session string
+}
+
+type Contact struct {
+    Displayname string
+    Username string
+}
+
+type Roster struct {
+    Contacts []Contact
 }
 
 func login(res http.ResponseWriter, req *http.Request) {
@@ -51,8 +58,28 @@ func login(res http.ResponseWriter, req *http.Request) {
     }
 }
 
+func roster(res http.ResponseWriter, req *http.Request) {
+    if req.Method == "GET" {
+
+        fmt.Println("roster")
+
+        res.WriteHeader(200)
+        res.Header().Set("Content-Type", "application/json")
+    
+        //names := []Contact{{"Superman", "superguy"}, {"Batman","bruce"}, {"Aquaman","alex"}}
+        names := Roster{ []Contact{{"Superman","Clark"},{"Batman","Bruce"},{"Aquaman","Alex"}}}
+        js, err := json.Marshal(names)
+        if err != nil {
+          http.Error(res, err.Error(), http.StatusInternalServerError)
+          return
+        }
+        res.Write(js)
+    }
+}
+
 func main() {
     http.HandleFunc("/", hello)
     http.HandleFunc("/login", login)
+    http.HandleFunc("/roster", roster)
     http.ListenAndServe(":8000", nil)
 }

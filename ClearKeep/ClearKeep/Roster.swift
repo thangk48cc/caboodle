@@ -10,13 +10,22 @@ class Contact {
 }
 
 class Roster {
-    static let sharedInstance = Rest()
+
+    static let sharedInstance = Roster()
+    
     var contacts = [Contact]()
     init() {}
-    func load(callback:([String]?) -> Void) {
+    
+    func load(callback:(Bool) -> Void) {
         Rest.sharedInstance.getRoster( {
             if $0 != nil {
-                callback($0)
+                print($0)
+                let response = $0! as [String:[[String:String]]];
+                let list = response["Contacts"]!
+                self.contacts = list.map({ Contact(username: $0["Username"]!, displayName: $0["Displayname"]!) });
+                callback(true)
+            } else {
+                callback(false)
             }
         })
     }

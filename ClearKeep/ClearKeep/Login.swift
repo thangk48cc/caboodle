@@ -63,10 +63,12 @@ class Login {
     
         Rest.sharedInstance.login(username, password: password, callback: {
             if !$0 { // login failed
+                self.callback(success:false)
                 dispatch_async(dispatch_get_main_queue(),{
                     self.challenge()
                 })
             }
+            self.callback(success: true)
         })
     }
 }

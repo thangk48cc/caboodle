@@ -1,18 +1,8 @@
-//
-//  MasterViewController.swift
-//  ClearKeep
-//
-//  Created by baba on 6/18/15.
-//  Copyright © 2015 ClearKeep. All rights reserved.
-//
-
 import UIKit
 
 class MasterViewController: UITableViewController {
 
     var detailViewController: DetailViewController? = nil
-    var objects = [AnyObject]()
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,18 +22,18 @@ class MasterViewController: UITableViewController {
         super.viewWillAppear(animated)
         Login.popup(self.parentViewController!, callback: {
             if $0 {
-               // Profile.sharedInstance.load()
+                Roster.sharedInstance.load( {
+                    print($0)
+                    dispatch_async(dispatch_get_main_queue(),{
+                        self.tableView.reloadData();
+                    })
+                })
             }
         });
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     func insertNewObject(sender: AnyObject) {
-        objects.insert(NSDate(), atIndex: 0)
+        Roster.sharedInstance.contacts.insert(Contact(username:"x", displayName:"y"), atIndex: 0)
         let indexPath = NSIndexPath(forRow: 0, inSection: 0)
         self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
     }
@@ -53,7 +43,7 @@ class MasterViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showDetail" {
             if let indexPath = self.tableView.indexPathForSelectedRow {
-                let object = objects[indexPath.row] as! NSDate
+                let object = Roster.sharedInstance.contacts[indexPath.row]
                 let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
                 controller.detailItem = object
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
@@ -69,14 +59,13 @@ class MasterViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return objects.count
+        print(Roster.sharedInstance.contacts.count)
+        return Roster.sharedInstance.contacts.count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
-
-        let object = objects[indexPath.row] as! NSDate
-        cell.textLabel!.text = object.description
+        cell.textLabel!.text = Roster.sharedInstance.contacts[indexPath.row].displayName
         return cell
     }
 
@@ -87,7 +76,7 @@ class MasterViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            objects.removeAtIndex(indexPath.row)
+            Roster.sharedInstance.contacts.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
