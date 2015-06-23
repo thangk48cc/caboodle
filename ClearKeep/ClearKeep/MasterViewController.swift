@@ -3,6 +3,7 @@ import UIKit
 class MasterViewController: UITableViewController {
 
     var detailViewController: DetailViewController? = nil
+    var loggedIn = false;
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,16 +21,19 @@ class MasterViewController: UITableViewController {
     override func viewWillAppear(animated: Bool) {
         self.clearsSelectionOnViewWillAppear = self.splitViewController!.collapsed
         super.viewWillAppear(animated)
-        Login.popup(self.parentViewController!, callback: {
-            if $0 {
-                Roster.sharedInstance.load( {
-                    print($0)
-                    dispatch_async(dispatch_get_main_queue(),{
-                        self.tableView.reloadData();
+        if !loggedIn {
+            Login.popup(self.parentViewController!, callback: {
+                if $0 {
+                    self.loggedIn = true
+                    Roster.sharedInstance.load( {
+                        print($0)
+                        dispatch_async(dispatch_get_main_queue(),{
+                            self.tableView.reloadData();
+                        })
                     })
-                })
-            }
-        });
+                }
+            });
+        }
     }
 
     func insertNewObject(sender: AnyObject) {
