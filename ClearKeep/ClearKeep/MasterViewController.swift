@@ -5,6 +5,8 @@ class MasterViewController: UITableViewController {
     var detailViewController: DetailViewController? = nil
     var loggedIn = false;
 
+    //@IBOutlet var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -16,6 +18,8 @@ class MasterViewController: UITableViewController {
             let controllers = split.viewControllers
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
         }
+        self.tableView.backgroundView = nil;
+        self.tableView.backgroundColor = UIColor.blackColor();
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -70,12 +74,14 @@ class MasterViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
         cell.textLabel!.text = Roster.sharedInstance.contacts[indexPath.row].displayName
+        cell.textLabel!.textColor = UIColor.orangeColor()
+        cell.backgroundColor = UIColor.blackColor()
         return cell
     }
 
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
-        return true
+        return false
     }
 
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {

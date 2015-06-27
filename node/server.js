@@ -1,5 +1,37 @@
+// requires
+
+var util = require('util')
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser')
+
+
+// mongodb
+
+var mongoose = require('mongoose'),
+                 Schema = mongoose.Schema,
+                 ObjectId = Schema.ObjectId;
+mongoose.connect('mongodb://localhost/my_database')
+  
+var PersonSchema = new Schema({
+    uid	  : String,
+    hashed  : String,
+    salt	  : String,
+    name	  : String,
+    pubkey  : String,
+    password: String
+});
+var PersonModel = mongoose.model('Person', PersonSchema);
+
+var PostingSchema = new Schema({
+    from	: ObjectId,
+    to	: ObjectId,
+    body	: String
+});
+var PostingModel = mongoose.model('Posting', PostingSchema);
+
+
+// express
 
 app.get('/', function (req, res) {
   console.log("hi")
@@ -10,7 +42,19 @@ app.post('/login', function (req, res) {
   res.json({session:'123456'});
 });
 
-app.post('/register', function (req, res) {
+app.post('/register', bodyParser.json(), function (req, res) {
+  
+  var person = new PersonModel();
+  console.log('body: ' + util.inspect(req.body))
+  person.name = req.body.username;
+  person.password = req.body.password;
+  person.save(function (err) {
+      if (!err)
+        console.log('saved ' + req.body.username);
+      else
+        console.log('failed to save ' + req.body.username);
+  });
+  
   res.json({session:'123456'});
 });
 
