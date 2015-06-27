@@ -13,6 +13,9 @@ class HttpHelper {
     }
 
     static func request(method:String, params : Dictionary<String, String>?, url : String, callback:Callback) {
+        
+        print(method + " " + url);
+        
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
         let session = NSURLSession.sharedSession()
         request.HTTPMethod = method
@@ -29,28 +32,27 @@ class HttpHelper {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
 
         // make the request
-        let task = session.dataTaskWithRequest(request, completionHandler: { data, response, error -> Void in
+        let task = session.dataTaskWithRequest(request, completionHandler: { data0, response, error -> Void in
 
             // parse the response
-            print("Response: \(response)")
             let statusCode = (response as! NSHTTPURLResponse).statusCode;
             if statusCode != 200 {
                 callback(status:statusCode, response:nil);
             } else {
             
-                let strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                print("Body: \(strData)")
+                let str = NSString(data: data0!, encoding: NSUTF8StringEncoding)!
+                let data = str.dataUsingEncoding(NSUTF8StringEncoding);
 
                 // parse the response JSON
                 do {
-                    let json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? NSDictionary
-                    if let parsedJSON = json {
+                    let json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves)
+                    //if let parsedJSON = json {
                         
                         // callback
-                        callback(status:statusCode, response:parsedJSON);
-                    }
+                        callback(status:statusCode, response:json);
+                    //}
                 } catch {
-                    let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                    let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)!
                     print("Error could not parse JSON: '\(jsonStr)'")
                 }
             }

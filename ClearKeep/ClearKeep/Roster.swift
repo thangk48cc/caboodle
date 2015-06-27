@@ -20,9 +20,8 @@ class Roster {
         Rest.sharedInstance.getRoster( {
             if $0 != nil {
                 print($0)
-                let response = $0! as [String:[[String:String]]];
-                let list = response["Contacts"]!
-                self.contacts = list.map({ Contact(username: $0["Username"]!, displayName: $0["Displayname"]!) });
+                let list = $0! as [[String:String]]
+                self.contacts = list.map({ Contact(username: $0["id"]!, displayName: $0["name"]!) });
                 callback(true)
             } else {
                 callback(false)

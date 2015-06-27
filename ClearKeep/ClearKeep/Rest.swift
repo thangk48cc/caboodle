@@ -2,7 +2,8 @@ import Foundation
 
 class Rest {
     
-    let serverAddress = "http://project00-983.appspot.com/"
+    //let serverAddress = "http://project00-983.appspot.com/"
+    let serverAddress = "http://127.0.0.1:3000/"
     
     static var session: String? = nil
     
@@ -20,10 +21,10 @@ class Rest {
 
     func auth(endpoint:String, username:String, password:String, callback:(success:Bool) -> Void) {
         let credentials = ["username":username, "password":password]
-        HttpHelper.post(credentials, url:serverAddress+endpoint, callback:{
+        HttpHelper.post(credentials, url:serverAddress + endpoint, callback:{
             if $0 == 200 {
                 let response = $1 as! [String:String];
-                Rest.session = response["Session"]!
+                Rest.session = response["session"]!
                 callback(success: true);
             } else {
                 callback(success: false);
@@ -31,10 +32,10 @@ class Rest {
         })
     }
 
-    func getRoster(callback:(contacts:[String:[[String:String]]]?) -> Void) {
+    func getRoster(callback:(contacts:[[String:String]]?) -> Void) {
         HttpHelper.get(nil, url:serverAddress+"roster" /*+Rest.session!*/, callback:{
             if $0 == 200 {
-                let response = $1 as! [String:[[String:String]]]
+                let response = $1 as! [[String:String]]
                 callback(contacts: response)
             } else {
                 callback(contacts: nil)

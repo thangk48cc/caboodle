@@ -20,7 +20,21 @@
 		05F39F291B33C1C70065E6A7 /* Roster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F39F281B33C1C70065E6A7 /* Roster.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		05B4BF8F1B3A0FAB0044A523 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		05B4BF921B3A10320044A523 /* ClearKeep.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ClearKeep.entitlements; sourceTree = "<group>"; };
 		05D8362F1B394C61003A4519 /* Crypt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Crypt.swift; sourceTree = "<group>"; };
 		05D836311B395150003A4519 /* ClearKeep-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ClearKeep-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		05DBDC491B33C00300320FCA /* ClearKeep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClearKeep.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -67,6 +81,7 @@
 		05DBDC4B1B33C00300320FCA /* ClearKeep */ = {
 			isa = PBXGroup;
 			children = (
+				05B4BF921B3A10320044A523 /* ClearKeep.entitlements */,
 				05DBDC4C1B33C00300320FCA /* AppDelegate.swift */,
 				05D836311B395150003A4519 /* ClearKeep-Bridging-Header.h */,
 				05D8362F1B394C61003A4519 /* Crypt.swift */,
@@ -94,6 +109,7 @@
 				05DBDC451B33C00300320FCA /* Sources */,
 				05DBDC461B33C00300320FCA /* Frameworks */,
 				05DBDC471B33C00300320FCA /* Resources */,
+				05B4BF8F1B3A0FAB0044A523 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -116,6 +132,14 @@
 					05DBDC481B33C00300320FCA = {
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = 64VA86R8GD;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.InterAppAudio = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
