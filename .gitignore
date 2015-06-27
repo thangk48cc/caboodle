@@ -36,3 +36,6 @@ DerivedData
 Carthage/Build
 
 .DS_Store
+
+# node.js
+node_modules
