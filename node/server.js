@@ -4,7 +4,12 @@ var util = require('util')
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser')
+var apn = require('apn');
 
+// apns
+
+var options = { };
+var apnConnection = new apn.Connection(options);
 
 // mongodb
 
@@ -61,6 +66,27 @@ app.post('/register', bodyParser.json(), function (req, res) {
 app.get('/roster', function (req, res) {
   res.json([{name:'Superman',id:'Clark'},{name:'Batman',id:'Bruce'},{name:'Aquaman',id:'Alex'}]);
 });
+
+
+app.get('/push', function (req, res) {
+
+  var token = req.body.token;
+  console.log('push to ' + token)
+  var device = new apn.Device(token);
+
+  var note = new apn.Notification();
+  
+  note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
+  note.badge = 3;
+  note.sound = "ping.aiff";
+  note.alert = "\uD83D\uDCE7 \u2709 You have a new message";
+  note.payload = {'messageFrom': 'Caroline'};
+  
+  apnConnection.pushNotification(note, device);
+
+});
+
+
 
 var server = app.listen(3000, function () {
 

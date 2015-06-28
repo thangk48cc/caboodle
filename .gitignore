@@ -39,3 +39,4 @@ Carthage/Build
 
 # node.js
 node_modules
+*.pem

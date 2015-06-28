@@ -1,7 +1,6 @@
 import Foundation
 
-func generateAesKeyForPassword(password: String, salt: NSData, roundCount: Int?, error: NSErrorPointer) -> (key: NSData, actualRoundCount: UInt32)?
-{
+func generateAesKeyForPassword(password: String, salt: NSData, roundCount: Int?, error: NSErrorPointer) -> (key: NSData, actualRoundCount: UInt32)? {
     let nsDerivedKey = NSMutableData(length: kCCKeySizeAES256)
     var actualRoundCount: UInt32
     

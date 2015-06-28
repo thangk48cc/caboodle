@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05B4BF9C1B3F1B470044A523 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B4BF9B1B3F1B470044A523 /* Util.swift */; };
 		05D836301B394C61003A4519 /* Crypt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D8362F1B394C61003A4519 /* Crypt.swift */; };
 		05DBDC4D1B33C00300320FCA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DBDC4C1B33C00300320FCA /* AppDelegate.swift */; };
 		05DBDC4F1B33C00300320FCA /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DBDC4E1B33C00300320FCA /* MasterViewController.swift */; };
@@ -35,6 +36,7 @@
 
 /* Begin PBXFileReference section */
 		05B4BF921B3A10320044A523 /* ClearKeep.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ClearKeep.entitlements; sourceTree = "<group>"; };
+		05B4BF9B1B3F1B470044A523 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		05D8362F1B394C61003A4519 /* Crypt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Crypt.swift; sourceTree = "<group>"; };
 		05D836311B395150003A4519 /* ClearKeep-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ClearKeep-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		05DBDC491B33C00300320FCA /* ClearKeep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClearKeep.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -91,6 +93,7 @@
 				05DBDC4E1B33C00300320FCA /* MasterViewController.swift */,
 				05DBDC601B33C06400320FCA /* Rest.swift */,
 				05F39F281B33C1C70065E6A7 /* Roster.swift */,
+				05B4BF9B1B3F1B470044A523 /* Util.swift */,
 				05DBDC521B33C00300320FCA /* Main.storyboard */,
 				05DBDC551B33C00300320FCA /* Assets.xcassets */,
 				05DBDC571B33C00300320FCA /* LaunchScreen.storyboard */,
@@ -180,6 +183,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				05D836301B394C61003A4519 /* Crypt.swift in Sources */,
+				05B4BF9C1B3F1B470044A523 /* Util.swift in Sources */,
 				05DBDC511B33C00300320FCA /* DetailViewController.swift in Sources */,
 				05DBDC651B33C06400320FCA /* Login.swift in Sources */,
 				05DBDC4F1B33C00300320FCA /* MasterViewController.swift in Sources */,
