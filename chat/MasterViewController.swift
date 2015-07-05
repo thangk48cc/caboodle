@@ -3,7 +3,6 @@ import UIKit
 class MasterViewController: UITableViewController {
 
     var detailViewController: DetailViewController? = nil
-    var loggedIn = false;
 
     //@IBOutlet var tableView: UITableView!
     
@@ -25,12 +24,18 @@ class MasterViewController: UITableViewController {
     override func viewWillAppear(animated: Bool) {
         self.clearsSelectionOnViewWillAppear = self.splitViewController!.collapsed
         super.viewWillAppear(animated)
-        if !loggedIn {
+
+        Rest.sharedInstance.reauth(reauthed)
+    }
+    
+    func reauth(success:Bool) {
+  
+        if !success {
+//        if Rest.sharedInstance.session == nil {
             Login.popup(self.parentViewController!, callback: {
                 if $0 {
-                    self.loggedIn = true
                     Roster.sharedInstance.load( {
-                        print($0)
+                        print("roster loaded " + String($0))
                         dispatch_async(dispatch_get_main_queue(),{
                             self.tableView.reloadData();
                         })
@@ -67,7 +72,7 @@ class MasterViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(Roster.sharedInstance.contacts.count)
+        print("# rows: " + Roster.sharedInstance.contacts.count)
         return Roster.sharedInstance.contacts.count
     }
 
