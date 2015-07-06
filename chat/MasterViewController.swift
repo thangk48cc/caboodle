@@ -8,9 +8,11 @@ class MasterViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        self.navigationItem.leftBarButtonItem = self.editButtonItem()
 
+        //self.navigationItem.leftBarButtonItem = self.editButtonItem()
+        let logoutButton = UIBarButtonItem(title:"Logout", style:UIBarButtonItemStyle.Plain, target:self, action:"logout:")
+        self.navigationItem.leftBarButtonItem = logoutButton
+        
         let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "insertNewObject:")
         self.navigationItem.rightBarButtonItem = addButton
         if let split = self.splitViewController {
@@ -28,21 +30,29 @@ class MasterViewController: UITableViewController {
         Rest.sharedInstance.reauth(reauthed)
     }
     
-    func reauth(success:Bool) {
+    func reauthed(success:Bool) {
   
         if !success {
-//        if Rest.sharedInstance.session == nil {
-            Login.popup(self.parentViewController!, callback: {
-                if $0 {
-                    Roster.sharedInstance.load( {
-                        print("roster loaded " + String($0))
-                        dispatch_async(dispatch_get_main_queue(),{
-                            self.tableView.reloadData();
-                        })
-                    })
-                }
-            });
+            self.loginPopup()
         }
+    }
+
+    func loginPopup() {
+        Login.popup(self.parentViewController!, callback: {
+            if $0 {
+                Roster.sharedInstance.load( {
+                    print("roster loaded " + String($0))
+                    dispatch_async(dispatch_get_main_queue(),{
+                        self.tableView.reloadData();
+                    })
+                })
+            }
+        });
+    }
+
+    func logout(sender: AnyObject) {
+        Rest.sharedInstance.logout()
+        self.loginPopup()
     }
 
     func insertNewObject(sender: AnyObject) {

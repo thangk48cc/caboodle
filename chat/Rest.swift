@@ -7,12 +7,12 @@ class Rest {
     
     var pushToken: String? = nil
     var session: String? = nil
-    var uiReady: Bool = false
-    
+    var reauthed: LoginCallback? = nil
+
     static let sharedInstance = Rest()
     
     typealias LoginCallback = (success:Bool) -> Void;
-
+    
     func setPushToken(token:NSData) {
         self.pushToken = token.hexadecimalString
         self.reauth()
@@ -22,7 +22,7 @@ class Rest {
         return auth("register", username:username, password:password, callback:callback);
     }
 
-    func login(username:String, password:String, callback:((success:Bool) -> Void)?=nil) {
+    func login(username:String, password:String, callback:(success:Bool) -> Void) {
 
         return auth("login", username:username, password:password, callback:callback);
     
@@ -31,10 +31,8 @@ class Rest {
     static func saveCredentials(username:String, password:String) {
         do {
             try Locksmith.updateData(["username": username, "password": password], forUserAccount: "ClearKeep")
-        } catch let error as LocksmithError {
-            print("could not save to keychain: " + String(error))
         } catch let error as NSError {
-            print("couldn't save to keychain: " + String(error))
+            print("could not save to keychain: " + String(error))
         }
     }
     
@@ -49,19 +47,23 @@ class Rest {
         return (u as! String, p as! String)
     }
     
-    // wait for both push token and masterVC then reauth
-    func reauth() {
-        if !uiReady || self.pushToken == nil {
+    // wait for  push token, creds, and masterVC then reauth
+    func reauth(callback:((success:Bool) -> Void)?=nil) {
+        if callback != nil {
+            self.reauthed = callback
+        }
+        if (self.reauthed == nil) || (self.pushToken == nil)  {
             return
         }
         guard let creds = Rest.loadCredentials() else {
             print("missing creds in keychain")
+            self.reauthed!(success:false)
             return
         }
-        self.login(creds.username, password: creds.password)
+        self.login(creds.username, password: creds.password, callback:self.reauthed!)
     }
     
-    func auth(endpoint:String, username:String, password:String, callback:((success:Bool) -> Void)?=nil) {
+    func auth(endpoint:String, username:String, password:String, callback:((success:Bool) -> Void)) {
         let credentials = ["username":username, "password":password, "pushToken":self.pushToken!]
         HttpHelper.post(credentials, url:serverAddress + endpoint, callback:{
             if $0 == 200 {
@@ -71,9 +73,9 @@ class Rest {
                 let response = $1 as! [String:String];
                 self.session = response["session"]!
                 print("session = " + self.session!)
-                callback?(success: true);
+                callback(success: true);
             } else {
-                callback?(success: false);
+                callback(success: false);
             }
         })
     }
@@ -87,5 +89,14 @@ class Rest {
                 callback(contacts: nil)
             }
         })
+    }
+    
+    func logout() {
+        self.session = nil
+        do {
+            try Locksmith.deleteDataForUserAccount("ClearKeep")
+        } catch let error as NSError {
+            print("could not remove from keychain: " + String(error))
+        }
     }
 }
