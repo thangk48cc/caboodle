@@ -19,7 +19,7 @@ class Roster {
     func load(callback:(Bool) -> Void) {
         Rest.sharedInstance.getRoster( {
             if $0 != nil {
-                print($0)
+                print("Roster load " + String($0))
                 let list = $0! as [[String:String]]
                 self.contacts = list.map({ Contact(username: $0["id"]!, displayName: $0["name"]!) });
                 callback(true)

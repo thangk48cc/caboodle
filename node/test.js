@@ -1,3 +1,23 @@
+/*
+var apn = require('apn');
+var options = { cert: 'cert.pem',
+    key: 'key.pem',
+    passphrase: '1234',
+    production: false
+};
+var apnConnection = new apn.Connection(options);
+var myDevice = new apn.Device('a3966798c193d8ddb46710c20cd1f6f765836efd2ff26a510ec5380659352afb');
+var note = new apn.Notification();
+
+note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
+note.badge = 3;
+note.sound = 'ping.aiff';
+note.alert = '\uD83D\uDCE7 \u2709 You have a new message';
+note.payload = {'messageFrom': 'Caroline'};
+
+apnConnection.pushNotification(note, myDevice);
+*/
+
 // requires
 
 var util = require('util')

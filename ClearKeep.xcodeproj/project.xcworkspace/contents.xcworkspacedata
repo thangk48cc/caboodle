@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:ClearKeep.xcodeproj">
+      location = "self:/Users/baba/tmp/ck0/chat/ClearKeep.xcodeproj">
    </FileRef>
 </Workspace>

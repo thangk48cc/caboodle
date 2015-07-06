@@ -6,12 +6,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     var window: UIWindow?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+
+        // set up UI
         let splitViewController = self.window!.rootViewController as! UISplitViewController
         let navigationController = splitViewController.viewControllers[splitViewController.viewControllers.count-1] as! UINavigationController
         navigationController.topViewController!.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem()
         splitViewController.delegate = self
 
+        // register for push
         UIApplication.sharedApplication().registerForRemoteNotifications()
         let settings = UIUserNotificationSettings(forTypes: .Alert, categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(settings)
@@ -20,12 +22,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     }
     
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-        Rest.setPushToken(deviceToken)
+        Rest.sharedInstance.setPushToken(deviceToken)
         print("Got token data! \(deviceToken)")
+        Rest.sharedInstance.reauth()
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+        Rest.sharedInstance.pushToken = "simulator"
         print("Couldn't register: \(error)")
+        Rest.sharedInstance.reauth()
     }
 
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
