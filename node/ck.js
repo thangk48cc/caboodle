@@ -23,18 +23,19 @@ var mongoose = require('mongoose'),
 mongoose.connect('mongodb://localhost/my_database')
   
 var PersonSchema = new Schema({
-    uid	  : String,
+    uid	    : String,
     hashed  : String,
-    salt	  : String,
-    name	  : String,
+    salt	: String,
+    name    : String,
     pubkey  : String,
-    password: String
+    password: String,
+    friends : [String]
 });
 var PersonModel = mongoose.model('Person', PersonSchema);
 
 var PostingSchema = new Schema({
     from	: ObjectId,
-    to	: ObjectId,
+    to      : ObjectId,
     body	: String
 });
 var PostingModel = mongoose.model('Posting', PostingSchema);
@@ -42,30 +43,67 @@ var PostingModel = mongoose.model('Posting', PostingSchema);
 
 // express
 
+function reject(res, status, message) {
+    res.status(status).send({ error: message });
+}
+
 app.get('/', function (req, res) {
   console.log("hi")
   res.send('Hello World!');
 });
 
 app.post('/login', bodyParser.json(), function (req, res) { 
-  console.log('login: ' + util.inspect(req.body))
-  res.json({session:'123456'});
+    console.log('login: ' + util.inspect(req.body))
+
+    var who = req.body.username
+    var password = req.body.password
+
+    PersonModel.find({name:who}, function (err, docs) {
+		if (err)
+			reject(err);
+		else if (!docs.length)
+			reject(res, 403, 'login: user ' + who + ' does not exist');
+		else {
+			try {
+				var passwordFromDB = JSON.parse(docs[0].password);
+				console.log('password from db: ' + passwordFromDB);
+
+				if (!password.compare(passwordFromDB))
+					reject(401, 'login: user ' + who + ' password mismatch: ' + password + ' != ' + passwordFromDB);
+				else
+					//accept(who, 'welcome back');
+                    res.json({session:'123456'});
+			} catch (err) {
+                reject(res, 500, err);
+			}
+		}
+	});
 });
 
 app.post('/register', bodyParser.json(), function (req, res) {
   
-  var person = new PersonModel();
-  console.log('body: ' + util.inspect(req.body))
-  person.name = req.body.username;
-  person.password = req.body.password;
-  person.save(function (err) {
-      if (!err)
-        console.log('saved ' + req.body.username);
-      else
-        console.log('failed to save ' + req.body.username);
-  });
-  
-  res.json({session:'123456'});
+    console.log('register: ' + util.inspect(req.body))
+    var who = req.body.username
+
+	PersonModel.find({name:who}, function (err, docs) {
+		if (err)
+			reject(res, 500, err);
+		else if (docs.length)
+			reject(res, 401, 'register: user ' + who + ' exists');
+        else {
+            var person = new PersonModel();
+            person.name = who;
+            person.password = req.body.password;
+            person.save(function (err) {
+                if (err) {
+                    reject(res, 500, err);
+                } else {
+                    console.log('saved ' + who);
+                    res.json({session:'123456'});
+                }
+            });
+        }
+    });
 });
 
 app.get('/roster', function (req, res) {
@@ -93,7 +131,13 @@ app.post('/push', bodyParser.json(), function (req, res) {
 
 });
 
+app.post('/befriend', bodyParser.json(), function (req, res) { 
 
+  console.log('befriend: ' + util.inspect(req.body))
+
+  var username = req.body.username
+
+});
 
 var server = app.listen(3000, function () {
 

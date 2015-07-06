@@ -3,7 +3,6 @@ import Foundation
 extension NSData {
     
     /// Return hexadecimal string representation of NSData bytes
-    //@objc(kdj_hexadecimalString)
     public var hexadecimalString: String {
         var bytes = [UInt8](count: length, repeatedValue: 0)
         getBytes(&bytes, length: length)

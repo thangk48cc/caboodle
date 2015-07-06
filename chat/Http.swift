@@ -45,12 +45,9 @@ class HttpHelper {
 
                 // parse the response JSON
                 do {
-                    let json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves)
-                    //if let parsedJSON = json {
-                        
+                    let json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves)                    
                         // callback
                         callback(status:statusCode, response:json);
-                    //}
                 } catch {
                     let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)!
                     print("Error could not parse JSON: '\(jsonStr)'")
@@ -60,50 +57,4 @@ class HttpHelper {
         
         task!.resume()
     }
-
-/*
-
-func HTTPsendRequest(request: NSMutableURLRequest, callback: (String, String?) -> Void) {
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(
-            request,
-            completionHandler: {
-                data, response, error in
-                if error != nil {
-                    callback("", error!.localizedDescription)
-                } else {
-                    callback(
-                        NSString(data: data!, encoding: NSUTF8StringEncoding)! as String,
-                        nil
-                    )
-                }
-        })
-        
-        task!.resume()
-}
-
-func JSONStringify(value: AnyObject, prettyPrinted: Bool = false) -> String {
-    if NSJSONSerialization.isValidJSONObject(value) {
-        
-        let data = try NSJSONSerialization.dataWithJSONObject(value, options: NSJSONWritingOptions.PrettyPrinted) {
-            return NSString(data: data, encoding: NSUTF8StringEncoding) as! String
-        } catch let serializationError as NSError {
-            println(serializationError)
-        }
-    }
-    return ""
-}
-
-func HTTPPostJSON(url: String, jsonObj: AnyObject, callback: (String, String?) -> Void) {
-    let request = NSMutableURLRequest(URL: NSURL(string: url)!)
-    request.HTTPMethod = "POST"
-    request.addValue("application/json",
-    forHTTPHeaderField: "Content-Type")
-    let jsonString = JSONStringify(jsonObj)
-    let data: NSData = jsonString.dataUsingEncoding(NSUTF8StringEncoding)!
-    request.HTTPBody = data
-    HTTPsendRequest(request, callback:callback)
-}
-
-*/
-
 }

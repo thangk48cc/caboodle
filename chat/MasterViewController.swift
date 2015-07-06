@@ -3,13 +3,10 @@ import UIKit
 class MasterViewController: UITableViewController {
 
     var detailViewController: DetailViewController? = nil
-
-    //@IBOutlet var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        //self.navigationItem.leftBarButtonItem = self.editButtonItem()
         let logoutButton = UIBarButtonItem(title:"Logout", style:UIBarButtonItemStyle.Plain, target:self, action:"logout:")
         self.navigationItem.leftBarButtonItem = logoutButton
         
@@ -31,7 +28,6 @@ class MasterViewController: UITableViewController {
     }
     
     func reauthed(success:Bool) {
-  
         if !success {
             self.loginPopup()
         }
@@ -56,11 +52,43 @@ class MasterViewController: UITableViewController {
     }
 
     func insertNewObject(sender: AnyObject) {
-        Roster.sharedInstance.contacts.insert(Contact(username:"x", displayName:"y"), atIndex: 0)
-        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-        self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+//        Roster.sharedInstance.contacts.insert(Contact(username:"x", displayName:"y"), atIndex: 0)
+//        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+//        self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+
+    
+        let alertController = UIAlertController(title: "Add a friend", message: "Enter your friend's username'", preferredStyle: .Alert)
+    
+        func userInput() -> String {
+            return alertController.textFields![0].text!
+        }
+
+        let befriendAction = UIAlertAction(title: "Add", style: .Default) { (_) in
+            let username = userInput();
+            Roster.sharedInstance.befriend(username)
+        }
+        befriendAction.enabled = false
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (_) in }
+        
+        func configureTextField(textField:UITextField, placeholder:String) {
+            textField.placeholder = placeholder
+            NSNotificationCenter.defaultCenter().addObserverForName(UITextFieldTextDidChangeNotification, object: textField, queue: NSOperationQueue.mainQueue()) { (notification) in
+                let enabled = userInput() != ""
+                befriendAction.enabled = enabled
+            }
+        }
+
+        alertController.addTextFieldWithConfigurationHandler { (textField) in
+            configureTextField(textField, placeholder: "Username");
+        }
+        
+        alertController.addAction(befriendAction)
+        
+        self.presentViewController(alertController, animated: true, completion: nil);
     }
 
+    
     // MARK: - Segues
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

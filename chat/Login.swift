@@ -3,18 +3,32 @@ import UIKit
 
 class Login {
 
-    var parent:UIViewController
-    var callback:Callback
+    var parent:UIViewController?
+    var callback:Callback?
+
+    private static var loginInstance: Login?
 
     init(parent:UIViewController, callback:Callback) {
-        self.parent = parent;
-        self.callback = callback;
+        self.parent = parent
+        self.callback = callback
+    }
+    
+    class func config(parent:UIViewController, callback:Callback) -> Login {
+        loginInstance = Login(parent: parent, callback:callback)
+        return loginInstance!
     }
 
+    class var sharedInstance: Login {
+        if loginInstance == nil {
+            print("error: shared called before setup")
+        }
+        return loginInstance!
+    }
+    
     typealias Callback = (success:Bool) -> Void;
 
     static func popup(parent:UIViewController, callback:Callback) {
-        Login(parent:parent, callback:callback).challenge()
+        Login.config(parent, callback:callback).challenge()
     }
 
     // popup the login alert
@@ -62,17 +76,17 @@ class Login {
         alertController.addAction(loginAction)
         alertController.addAction(registerAction)
 
-        self.parent.presentViewController(alertController, animated: true, completion: nil);
+        self.parent!.presentViewController(alertController, animated: true, completion: nil);
     }
 
     func authenticated(success:Bool) {
         if !success { // login failed
-            self.callback(success:false)
+            self.callback!(success:false)
             dispatch_async(dispatch_get_main_queue(),{
                 self.challenge()
             })
         }
-        self.callback(success: true)
+        self.callback!(success: true)
     }
 
     func register(username:String, password:String) {
@@ -82,4 +96,24 @@ class Login {
     func login(username:String, password:String) {
         Rest.sharedInstance.login(username, password: password, callback:authenticated)
     }
+
+    static func saveCredentials(username:String, password:String) {
+        do {
+            try Locksmith.updateData(["username": username, "password": password], forUserAccount: "ClearKeep")
+        } catch let error as NSError {
+            print("could not save to keychain: " + String(error))
+        }
+    }
+    
+    static func loadCredentials() -> (username: String, password: String)? {
+        guard let creds = Locksmith.loadDataForUserAccount("ClearKeep") else {
+            print("could not load from keychain")
+            return nil
+        }
+        guard let u = creds["username"], p = creds["password"] else {
+            return nil
+        }
+        return (u as! String, p as! String)
+    }
+    
 }

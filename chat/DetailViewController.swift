@@ -1,11 +1,3 @@
-//
-//  DetailViewController.swift
-//  ClearKeep
-//
-//  Created by baba on 6/18/15.
-//  Copyright © 2015 ClearKeep. All rights reserved.
-//
-
 import UIKit
 
 class DetailViewController: UIViewController {

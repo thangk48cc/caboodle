@@ -28,25 +28,6 @@ class Rest {
     
     }
 
-    static func saveCredentials(username:String, password:String) {
-        do {
-            try Locksmith.updateData(["username": username, "password": password], forUserAccount: "ClearKeep")
-        } catch let error as NSError {
-            print("could not save to keychain: " + String(error))
-        }
-    }
-    
-    static func loadCredentials() -> (username: String, password: String)? {
-        guard let creds = Locksmith.loadDataForUserAccount("ClearKeep") else {
-            print("could not load from keychain")
-            return nil
-        }
-        guard let u = creds["username"], p = creds["password"] else {
-            return nil
-        }
-        return (u as! String, p as! String)
-    }
-    
     // wait for  push token, creds, and masterVC then reauth
     func reauth(callback:((success:Bool) -> Void)?=nil) {
         if callback != nil {
@@ -55,7 +36,7 @@ class Rest {
         if (self.reauthed == nil) || (self.pushToken == nil)  {
             return
         }
-        guard let creds = Rest.loadCredentials() else {
+        guard let creds = Login.loadCredentials() else {
             print("missing creds in keychain")
             self.reauthed!(success:false)
             return
@@ -68,7 +49,7 @@ class Rest {
         HttpHelper.post(credentials, url:serverAddress + endpoint, callback:{
             if $0 == 200 {
                 
-                Rest.saveCredentials(username, password:password)
+                Login.saveCredentials(username, password:password)
 
                 let response = $1 as! [String:String];
                 self.session = response["session"]!
@@ -98,5 +79,12 @@ class Rest {
         } catch let error as NSError {
             print("could not remove from keychain: " + String(error))
         }
+    }
+    
+    func befriend(friend:String, callback:(success:Bool) -> Void) {
+        HttpHelper.post([friend:friend], url:serverAddress+"befriend" /*+Rest.session!*/, callback:{
+            $1 // noop
+            callback(success:$0 == 200)
+        })
     }
 }

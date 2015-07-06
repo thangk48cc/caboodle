@@ -1,6 +1,7 @@
 import Foundation
 
 class Contact {
+
     var displayName: String
     var username: String
     init(username:String, displayName:String) {
@@ -25,6 +26,14 @@ class Roster {
                 callback(true)
             } else {
                 callback(false)
+            }
+        })
+    }
+    
+    func befriend(friend:String) {
+        Rest.sharedInstance.befriend(friend, callback:{
+            if !$0 {
+                print("could not add " + friend)
             }
         })
     }
