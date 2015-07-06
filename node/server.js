@@ -8,7 +8,11 @@ var apn = require('apn');
 
 // apns
 
-var options = { };
+var options = { cert: 'cert.pem',
+    key: 'key.pem',
+    passphrase: '1234',
+    production: false
+};
 var apnConnection = new apn.Connection(options);
 
 // mongodb
@@ -43,7 +47,8 @@ app.get('/', function (req, res) {
   res.send('Hello World!');
 });
 
-app.post('/login', function (req, res) {
+app.post('/login', bodyParser.json(), function (req, res) { 
+  console.log('login: ' + util.inspect(req.body))
   res.json({session:'123456'});
 });
 
@@ -68,7 +73,9 @@ app.get('/roster', function (req, res) {
 });
 
 
-app.get('/push', function (req, res) {
+app.post('/push', bodyParser.json(), function (req, res) { 
+
+  console.log('body: ' + util.inspect(req.body))
 
   var token = req.body.token;
   console.log('push to ' + token)
@@ -96,3 +103,4 @@ var server = app.listen(3000, function () {
   console.log('Example app listening at http://%s:%s', host, port);
 
 });
+
