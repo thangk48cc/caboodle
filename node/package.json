@@ -1,18 +1,24 @@
 {
   "name": "node",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.0",
+  "description": "VoIP server",
   "main": "server.js",
   "dependencies": {
     "apn": "^1.7.4",
-    "body-parser": "^1.13.1",
-    "express": "^4.13.0",
+    "express": "^4.13.1",
+    "express-session": "^1.11.3",
+    "body-parser": "^1.13.2",
     "mongoose": "^4.0.6"
   },
   "devDependencies": {},
   "scripts": {
     "start": "node server.js"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "ClearKeep",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "github.com/clearkeep/caboodle.git"
+  },
+  "readme": "README.md"
 }
