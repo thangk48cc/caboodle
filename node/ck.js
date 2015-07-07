@@ -60,21 +60,20 @@ app.post('/login', bodyParser.json(), function (req, res) {
 
     PersonModel.find({name:who}, function (err, docs) {
 		if (err)
-			reject(err);
+			reject(res, 500, "find error. " + err.message);
 		else if (!docs.length)
 			reject(res, 403, 'login: user ' + who + ' does not exist');
 		else {
 			try {
-				var passwordFromDB = JSON.parse(docs[0].password);
+				var passwordFromDB = docs[0].password;
 				console.log('password from db: ' + passwordFromDB);
 
-				if (!password.compare(passwordFromDB))
-					reject(401, 'login: user ' + who + ' password mismatch: ' + password + ' != ' + passwordFromDB);
+				if (password != passwordFromDB)
+					reject(res, 401, 'login: user ' + who + ' password mismatch: ' + password + ' != ' + passwordFromDB);
 				else
-					//accept(who, 'welcome back');
                     res.json({session:'123456'});
 			} catch (err) {
-                reject(res, 500, err);
+                reject(res, 500, "could not get password from DB. " + err);
 			}
 		}
 	});
