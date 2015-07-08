@@ -17,24 +17,24 @@ class Roster {
     var contacts = [Contact]()
     init() {}
     
-    func load(callback:(Bool) -> Void) {
-        Rest.sharedInstance.getRoster( {
-            if $0 != nil {
-                print("Roster load " + String($0))
-                let list = $0! as [[String:String]]
-                self.contacts = list.map({ Contact(username: $0["id"]!, displayName: $0["name"]!) });
-                callback(true)
-            } else {
-                callback(false)
-            }
-        })
-    }
-    
-    func befriend(friend:String) {
-        Rest.sharedInstance.befriend(friend, callback:{
-            if !$0 {
-                print("could not add " + friend)
-            }
-        })
+//    func load(callback:(Bool) -> Void) {
+//        Rest.sharedInstance.getRoster( {
+//            if $0 != nil {
+//                print("Roster load " + String($0))
+//                let list = $0! as [String]
+//                self.contacts = list.map({ Contact(username: "somebody", displayName: $0) });
+//                callback(true)
+//            } else {
+//                callback(false)
+//            }
+//        })
+//    }
+
+    func set(friends:[String]?) {
+        if let buds = friends {
+            self.contacts = buds.map({ Contact(username: "somebody", displayName: $0) })
+        } else {
+            self.contacts.removeAll()
+        }
     }
 }

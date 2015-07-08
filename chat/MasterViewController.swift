@@ -27,22 +27,24 @@ class MasterViewController: UITableViewController {
         Rest.sharedInstance.reauth(reauthed)
     }
     
-    func reauthed(success:Bool) {
-        if !success {
+    func reauthed(success:Bool, friends:[String]?) {
+        if success {
+            self.rosterUpdate(friends)
+        } else {
             self.loginPopup()
         }
+    }
+    
+    func rosterUpdate(friends:[String]?) {
+        Roster.sharedInstance.set(friends)
+        dispatch_async(dispatch_get_main_queue(),{
+            self.tableView.reloadData();
+        })
     }
 
     func loginPopup() {
         Login.popup(self.parentViewController!, callback: {
-            if $0 {
-                Roster.sharedInstance.load( {
-                    print("roster loaded " + String($0))
-                    dispatch_async(dispatch_get_main_queue(),{
-                        self.tableView.reloadData();
-                    })
-                })
-            }
+        self.rosterUpdate($1)
         });
     }
 
@@ -65,7 +67,9 @@ class MasterViewController: UITableViewController {
 
         let befriendAction = UIAlertAction(title: "Add", style: .Default) { (_) in
             let username = userInput();
-            Roster.sharedInstance.befriend(username)
+            Rest.sharedInstance.befriend(username, callback: {
+                self.rosterUpdate($0)
+            });
         }
         befriendAction.enabled = false
         

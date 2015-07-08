@@ -25,10 +25,12 @@ class Login {
         return loginInstance!
     }
     
-    typealias Callback = (success:Bool) -> Void;
+    typealias Callback = (success:Bool, friends:[String]?) -> Void;
 
     static func popup(parent:UIViewController, callback:Callback) {
-        Login.config(parent, callback:callback).challenge()
+        dispatch_async(dispatch_get_main_queue(),{
+            Login.config(parent, callback:callback).challenge()
+        })
     }
 
     // popup the login alert
@@ -79,14 +81,14 @@ class Login {
         self.parent!.presentViewController(alertController, animated: true, completion: nil);
     }
 
-    func authenticated(success:Bool) {
+    func authenticated(success:Bool, friends:[String]?) {
         if !success { // login failed
-            self.callback!(success:false)
+            self.callback!(success:false, friends:nil)
             dispatch_async(dispatch_get_main_queue(),{
                 self.challenge()
             })
         }
-        self.callback!(success: true)
+        self.callback!(success:true, friends:friends)
     }
 
     func register(username:String, password:String) {

@@ -70,6 +70,7 @@ app.use(expressSession({
 }));
 
 function reject(res, status, message) {
+    console.log(message);
     res.status(status).send({ error: message });
 }
 
@@ -149,8 +150,9 @@ app.post('/register', bodyParser.json(), function (req, res) {
 
 app.get('/roster', function (req, res) {
     //res.json([{name:'Superman',id:'Clark'},{name:'Batman',id:'Bruce'},{name:'Aquaman',id:'Alex'}]);
-    var person = loadPerson(req.session.username, res)
-    res.json(person.friends)
+    personLoad(req.session.username, res, function(person) {
+        res.json(person.friends)
+    });
 });
 
 
@@ -173,12 +175,14 @@ app.post('/push', bodyParser.json(), function (req, res) {
     apnConnection.pushNotification(note, device);
 });
 
-function personLoad(who, res) {
+function personLoad(who, res, callback) {
+    console.log('personLoad ' + who);
     PersonModel.find({name:who}, function (err, docs) {
         if (err) {
             reject(res, 500, err);
         } else if (docs.length != 0) {
-            return docs[0]
+            console.log('\tfound ' + docs[0]);
+            callback(docs[0]);
         }    
     });
 }
@@ -196,31 +200,36 @@ function personSave(person, res) {
 app.post('/befriend', bodyParser.json(), function (req, res) { 
 
     console.log('befriend: ' + util.inspect(req.body))
-    var whom = personLoad(req.body.username, res)
-    var who = personLoad(req.session.username, res)
-    var action = req.body.action;
+    console.log('\tsession: ' + util.inspect(req.session));
+    personLoad(req.body.username, res, function (whom) {
+        personLoad(req.session.username, res, function (who) {
 
-    if (action == "add") {
-        if (whom == nil) {
-            reject(res, 404, 'befriend: user ' + whom.name + ' does not exist');
-            return
-        }
-        if (who.friends.add(whom.name)) {
-            reject(res, 422, 'befriend: user ' + whom.name + ' is already a friend');
-            return
-        }
-
-    } else if (action == "del") { // unfriend
-        if (who.friends.remove(whom.name)) {
-            reject(res, 404, 'befriend: user ' + whom.name + ' is not a friend');
-            return
-        }
-    } else {
-        reject(res, 422, 'befriend: unknown action ' + action);
-        return
-    }
-
-    personSave(who)
+            var action = req.body.action;
+            if (action == "add") {
+                if (!whom) {
+                    reject(res, 404, 'befriend: user ' + req.body.username + ' does not exist');
+                    return
+                }
+                if (who.friends.add(whom.name)) {
+                    reject(res, 422, 'befriend: user ' + whom.name + ' is already a friend');
+                    return
+                }
+        
+            } else if (action == "del") { // unfriend
+                if (who.friends.remove(whom.name)) {
+                    reject(res, 404, 'befriend: user ' + whom.name + ' is not a friend');
+                    return
+                }
+            } else {
+                reject(res, 422, 'befriend: unknown action ' + action);
+                return
+            }
+        
+            personSave(who)
+            console.log('\tbefriend result : ' + who.friends)
+            res.json(who.friends);
+        });
+    });
 });
 
 
