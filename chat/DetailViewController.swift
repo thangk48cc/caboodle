@@ -2,36 +2,44 @@ import UIKit
 
 class DetailViewController: UIViewController {
 
-    @IBOutlet weak var detailDescriptionLabel: UILabel!
+    var master: MasterViewController?
+    var peer: Contact?
 
-
-    var detailItem: AnyObject? {
-        didSet {
-            // Update the view.
-            self.configureView()
-        }
+    @IBOutlet weak var transcript: UITextView!
+    @IBOutlet weak var entry: UITextField!
+    @IBOutlet weak var bar: UINavigationItem!
+    
+    @IBAction func unfriend(sender: AnyObject) {
+        
+        Rest.sharedInstance.befriend((peer?.username)!, foreva:false, callback: {
+            self.master!.rosterUpdate($0)
+        });
+ 
+        navigationController!.popViewControllerAnimated(true)
     }
 
-    func configureView() {
-        // Update the user interface for the detail item.
-        if let detail = self.detailItem {
-            if let label = self.detailDescriptionLabel {
-                label.text = detail.description
+    @IBAction func send(sender: AnyObject) {
+        
+        Rest.sharedInstance.send((peer?.username)!, message: entry.text!, callback: {
+            if !$0 {
+                print("error sending " + $1)
             }
-        }
+        })
+
+        transcript.text = transcript.text + "me: " + entry.text!
+        entry.text?.removeAll()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        self.configureView()
+
+        self.bar.title = peer?.username
+        transcript.text = "some text"
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
 }
 

@@ -34,7 +34,7 @@ class MasterViewController: UITableViewController {
             self.loginPopup()
         }
     }
-    
+
     func rosterUpdate(friends:[String]?) {
         Roster.sharedInstance.set(friends)
         dispatch_async(dispatch_get_main_queue(),{
@@ -54,11 +54,6 @@ class MasterViewController: UITableViewController {
     }
 
     func insertNewObject(sender: AnyObject) {
-//        Roster.sharedInstance.contacts.insert(Contact(username:"x", displayName:"y"), atIndex: 0)
-//        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-//        self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-
-    
         let alertController = UIAlertController(title: "Add a friend", message: "Enter your friend's username'", preferredStyle: .Alert)
     
         func userInput() -> String {
@@ -67,7 +62,7 @@ class MasterViewController: UITableViewController {
 
         let befriendAction = UIAlertAction(title: "Add", style: .Default) { (_) in
             let username = userInput();
-            Rest.sharedInstance.befriend(username, callback: {
+            Rest.sharedInstance.befriend(username, foreva:true, callback: {
                 self.rosterUpdate($0)
             });
         }
@@ -100,7 +95,8 @@ class MasterViewController: UITableViewController {
             if let indexPath = self.tableView.indexPathForSelectedRow {
                 let object = Roster.sharedInstance.contacts[indexPath.row]
                 let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
-                controller.detailItem = object
+                controller.master = self
+                controller.peer = object
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }

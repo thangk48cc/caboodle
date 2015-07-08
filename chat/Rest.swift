@@ -78,11 +78,20 @@ class Rest {
         }
     }
     
-    func befriend(friend:String, callback:(friends:[String]) -> Void) {
-        HttpHelper.post(["username":friend, "action":"add"], url:serverAddress+"befriend", callback:{
+    func befriend(friend:String, foreva:Bool, callback:(friends:[String]) -> Void) {
+        
+        let action = (foreva ? "add" : "del")
+        HttpHelper.post(["username":friend, "action":action], url:serverAddress+"befriend", callback:{
             if $0 == 200 {
                 callback(friends:$1 as! [String])
             }
+        })
+    }
+
+    func send(recipient:String, message:String, callback:(success:Bool, message:String) -> Void) {
+        HttpHelper.post(["username":recipient, "message":message], url:serverAddress+"send", callback:{
+            $1; // noop
+            callback(success:$0==200, message:message)
         })
     }
 }
