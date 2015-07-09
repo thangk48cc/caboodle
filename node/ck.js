@@ -95,12 +95,10 @@ app.post('/login', bodyParser.json(), function (req, res) {
 			try {
                 var person = docs[0];
 				var passwordFromDB = person.password;
-				console.log('password from db: ' + passwordFromDB);
 
 				if (password != passwordFromDB) {
 					reject(res, 401, 'login: user ' + who + ' password mismatch: ' + password + ' != ' + passwordFromDB);
 				} else {
-                    //res.json({session:'123456'});
                     req.session.username = who;
                     res.json(person.friends);
 				}
@@ -141,7 +139,6 @@ app.post('/register', bodyParser.json(), function (req, res) {
                     console.log('saved ' + who);
                     req.session.username = who;
                     res.status(204).send();
-                    //res.json({session:'123456'});
                 }
             });
         }
@@ -181,7 +178,6 @@ function personLoad(who, res, callback) {
         if (err) {
             reject(res, 500, err);
         } else if (docs.length != 0) {
-            console.log('\tfound ' + docs[0]);
             callback(docs[0]);
         }    
     });

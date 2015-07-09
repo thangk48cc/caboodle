@@ -81,7 +81,6 @@ class MasterViewController: UITableViewController {
         alertController.addTextFieldWithConfigurationHandler { (textField) in
             configureTextField(textField, placeholder: "Username");
         }
-        
         alertController.addAction(befriendAction)
         
         self.presentViewController(alertController, animated: true, completion: nil);

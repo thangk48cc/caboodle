@@ -2,8 +2,8 @@ import Foundation
 
 class Rest {
     
-    let serverAddress = "http://127.0.0.1:3000/"
-    //let serverAddress = "http://45.55.12.220:3000/"
+    //let serverAddress = "http://127.0.0.1:3000/"
+    let serverAddress = "http://45.55.12.220:3000/"
     
     var pushToken: String? = nil
     var reauthed: LoginCallback? = nil
@@ -44,7 +44,7 @@ class Rest {
     func auth(endpoint:String, username:String, password:String, callback:((success:Bool, friends:[String]?) -> Void)) {
         let credentials = ["username":username, "password":password, "pushToken":self.pushToken!]
         HttpHelper.post(credentials, url:serverAddress + endpoint, callback:{
-            if $0 == 200 {
+            if ($0 == 200) || ($0 == 204) {
                 Login.saveCredentials(username, password:password)
                 let friends = $1 as! [String]
                 callback(success:true, friends:friends);
@@ -54,16 +54,16 @@ class Rest {
         })
     }
 
-    func getRoster(callback:(contacts:[String]?) -> Void) {
-        HttpHelper.get(nil, url:serverAddress+"roster", callback:{
-            if $0 == 200 {
-                let response = $1 as! [String]
-                callback(contacts: response)
-            } else {
-                callback(contacts: nil)
-            }
-        })
-    }
+//    func getRoster(callback:(contacts:[String]?) -> Void) {
+//        HttpHelper.get(nil, url:serverAddress+"roster", callback:{
+//            if $0 == 200 {
+//                let response = $1 as! [String]
+//                callback(contacts: response)
+//            } else {
+//                callback(contacts: nil)
+//            }
+//        })
+//    }
     
     func logout(callback:((success:Bool) -> Void)?=nil) {
         HttpHelper.get(nil, url:serverAddress+"logout", callback:{
