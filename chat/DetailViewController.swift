@@ -17,6 +17,12 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.bar.title = peer?.username
+        
+        self.entry.addTarget(self, action: "send:", forControlEvents: .EditingDidEndOnExit)
+        
+//        entry.addTarget:textField
+//            action:@selector(resignFirstResponder)
+//        forControlEvents:UIControlEventEditingDidEndOnExit];
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -31,14 +37,14 @@ class DetailViewController: UIViewController {
 
     @IBAction func send(sender: AnyObject) {
         
-        Rest.sharedInstance.send((peer?.username)!, message: entry.text!, callback: {
+        Rest.sharedInstance.send((peer?.username)!, message: self.entry.text!, callback: {
             if !$0 {
                 print("error sending " + $1)
             }
         })
         
-        transcript.text = transcript.text + "\nme: " + entry.text!
-        entry.text?.removeAll()
+        transcript.text = transcript.text + "\nme: " + self.entry.text!
+        self.entry.text?.removeAll()
     }
     
     @IBAction func unfriend(sender: AnyObject) {
@@ -74,7 +80,7 @@ class DetailViewController: UIViewController {
         let convertedKeyboardEndFrame = view.convertRect(keyboardEndFrame, fromView:view.window)
         let rawAnimationCurve = (info[UIKeyboardAnimationCurveUserInfoKey]?.unsignedIntegerValue)! << 16
         let animationCurve = UIViewAnimationOptions(rawValue:UInt(rawAnimationCurve))
-        entryBottom.constant = CGRectGetMaxY(view.bounds) - CGRectGetMinY(convertedKeyboardEndFrame)
+        self.entryBottom.constant = CGRectGetMaxY(view.bounds) - CGRectGetMinY(convertedKeyboardEndFrame) + 10
         
         UIView.animateWithDuration(animationDuration, delay:0.0, options:[.BeginFromCurrentState, animationCurve], animations:{
             self.view.layoutIfNeeded()
