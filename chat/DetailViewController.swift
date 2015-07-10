@@ -17,12 +17,7 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.bar.title = peer?.username
-        
         self.entry.addTarget(self, action: "send:", forControlEvents: .EditingDidEndOnExit)
-        
-//        entry.addTarget:textField
-//            action:@selector(resignFirstResponder)
-//        forControlEvents:UIControlEventEditingDidEndOnExit];
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -68,7 +63,6 @@ class DetailViewController: UIViewController {
     }
 
     func keyboardWillShow(notification: NSNotification) {
-        //self.moveTextViewForKeyboard(notification, up:true)
         self.updateBottomLayoutConstraintWithNotification(notification)
     }
     
@@ -88,70 +82,6 @@ class DetailViewController: UIViewController {
     }
     
     func keyboardWillHide(notification: NSNotification) {
-        self.moveTextViewForKeyboard(notification, up:false)
-    }
-    
-    
-    func moveTextViewForKeyboard(notification: NSNotification, up:Bool) {
-
-        let info : NSDictionary = notification.userInfo!
-
-        let duration = (info[UIKeyboardAnimationDurationUserInfoKey]?.doubleValue)!
-//        let curve = (info[UIKeyboardAnimationCurveUserInfoKey]?.integerValue)!
-
-        var keyboardRect = (info[UIKeyboardFrameEndUserInfoKey]?.CGRectValue)!
-        keyboardRect = self.view.convertRect(keyboardRect, fromView: nil)
-        
-        
-        self.view.setNeedsLayout()
-        self.view.setNeedsUpdateConstraints()
-        
-        UIView.animateWithDuration(duration, animations: {
-            
-            var newTranscriptFrame = self.transcript.frame
-            self.originalTranscriptFrame = self.transcript.frame
-            newTranscriptFrame.size.height -= keyboardRect.size.height
-            self.transcript.frame = newTranscriptFrame
-            
-            var newEntryFrame = self.entry.frame
-            self.originalEntryFrame = self.entry.frame
-            newEntryFrame.origin.y -= keyboardRect.size.height
-            self.entry.frame = newEntryFrame
-            
-        })
-        
-}
-    
-    
-    func keyboardWasShown(notification: NSNotification) {
-        
-        let info : NSDictionary = notification.userInfo!
-        let keyboardSize = (info[UIKeyboardFrameBeginUserInfoKey]?.CGRectValue.size)!
-        //let keyboardSize = info.objectForKey(UIKeyboardFrameBeginUserInfoKey)?.frame
-        
-//        let insets: UIEdgeInsets = UIEdgeInsetsMake(self.scrollView.contentInset.top, 0, keyboardSize.height, 0)
-        
-//        self.scrollView.contentInset = insets
-//        self.scrollView.scrollIndicatorInsets = insets
-//        
-//        self.scrollView.contentOffset = CGPointMake(self.scrollView.contentOffset.x, self.scrollView.contentOffset.y + keyboardSize.height)
-    }
-    
-    func keyboardWillBeHidden (notification: NSNotification) {
-        
-        let info : NSDictionary = notification.userInfo!
-        let keyboardSize = (info[UIKeyboardFrameBeginUserInfoKey]?.CGRectValue.size)!
-//        let keyboardSize = info.objectForKey(UIKeyboardFrameBeginUserInfoKey)?.frame
-        
-//        let insets: UIEdgeInsets = UIEdgeInsetsMake(self.scrollView.contentInset.top, 0, keyboardSize.height, 0)
-        
-//        self.scrollView.contentInset = insets
-//        self.scrollView.scrollIndicatorInsets = insets
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        // todo
     }
 }
-

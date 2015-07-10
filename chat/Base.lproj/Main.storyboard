@@ -41,34 +41,22 @@
                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" address="YES" calendarEvent="YES"/>
                             </textView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="st2-z2-fKM">
-                                <rect key="frame" x="20" y="486" width="506" height="30"/>
+                                <rect key="frame" x="20" y="486" width="560" height="30"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="textColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="send" enablesReturnKeyAutomatically="YES"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hVZ-xz-ZnT">
-                                <rect key="frame" x="534" y="486" width="46" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="46" id="caX-Qe-Dfo"/>
-                                </constraints>
-                                <state key="normal" title="Send"/>
-                                <connections>
-                                    <action selector="send:" destination="JEX-9P-axG" eventType="touchUpInside" id="hPw-JH-KG8"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="vmN-1i-evX" firstAttribute="top" secondItem="svH-Pt-448" secondAttribute="top" constant="20" symbolic="YES" id="Au2-OZ-ILx"/>
-                            <constraint firstItem="st2-z2-fKM" firstAttribute="top" secondItem="hVZ-xz-ZnT" secondAttribute="top" id="Gre-WQ-bZc"/>
-                            <constraint firstItem="st2-z2-fKM" firstAttribute="leading" secondItem="svH-Pt-448" secondAttribute="leadingMargin" id="LBg-pf-YAZ"/>
-                            <constraint firstAttribute="bottom" secondItem="st2-z2-fKM" secondAttribute="bottom" constant="20" symbolic="YES" id="TIQ-Fr-9XT"/>
-                            <constraint firstItem="hVZ-xz-ZnT" firstAttribute="trailing" secondItem="vmN-1i-evX" secondAttribute="trailing" id="TP5-Qh-g60"/>
-                            <constraint firstItem="st2-z2-fKM" firstAttribute="top" secondItem="vmN-1i-evX" secondAttribute="bottom" constant="8" symbolic="YES" id="gHg-bm-UBZ"/>
-                            <constraint firstItem="vmN-1i-evX" firstAttribute="trailing" secondItem="svH-Pt-448" secondAttribute="trailingMargin" id="hOj-JC-rtZ"/>
-                            <constraint firstItem="hVZ-xz-ZnT" firstAttribute="leading" secondItem="st2-z2-fKM" secondAttribute="trailing" constant="8" symbolic="YES" id="nae-FK-e9r"/>
-                            <constraint firstItem="st2-z2-fKM" firstAttribute="leading" secondItem="vmN-1i-evX" secondAttribute="leading" id="xUN-lC-RN6"/>
+                            <constraint firstItem="vmN-1i-evX" firstAttribute="trailing" secondItem="st2-z2-fKM" secondAttribute="trailing" id="Ih8-Hs-yVi"/>
+                            <constraint firstItem="st2-z2-fKM" firstAttribute="trailing" secondItem="svH-Pt-448" secondAttribute="trailingMargin" id="L9b-io-SIu"/>
+                            <constraint firstItem="st2-z2-fKM" firstAttribute="leading" secondItem="svH-Pt-448" secondAttribute="leadingMargin" id="Sl4-bF-dRQ"/>
+                            <constraint firstItem="vmN-1i-evX" firstAttribute="leading" secondItem="st2-z2-fKM" secondAttribute="leading" id="XQU-VU-jv4"/>
+                            <constraint firstItem="st2-z2-fKM" firstAttribute="top" secondItem="vmN-1i-evX" secondAttribute="bottom" constant="8" symbolic="YES" id="d0q-Qd-qEh"/>
+                            <constraint firstAttribute="bottom" secondItem="st2-z2-fKM" secondAttribute="bottom" constant="20" symbolic="YES" id="gRg-75-tar"/>
+                            <constraint firstItem="vmN-1i-evX" firstAttribute="top" secondItem="svH-Pt-448" secondAttribute="top" constant="20" symbolic="YES" id="kn7-Ek-sIe"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
@@ -83,7 +71,6 @@
                     <connections>
                         <outlet property="bar" destination="mOI-FS-AaM" id="PsN-jD-pJ1"/>
                         <outlet property="entry" destination="st2-z2-fKM" id="9x6-Na-Qcb"/>
-                        <outlet property="entryBottom" destination="TIQ-Fr-9XT" id="KuX-gD-K7a"/>
                         <outlet property="transcript" destination="vmN-1i-evX" id="XqO-IF-mS1"/>
                     </connections>
                 </viewController>
