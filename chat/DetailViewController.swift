@@ -4,9 +4,12 @@ class DetailViewController: UIViewController {
 
     var master: MasterViewController?
     var peer: Contact?
+    var originalTranscriptFrame: CGRect?
+    var originalEntryFrame: CGRect?
 
     
     @IBOutlet weak var bar: UINavigationItem!
+    @IBOutlet weak var entryBottom: NSLayoutConstraint!
     @IBOutlet weak var transcript: UITextView!
     @IBOutlet weak var entry: UITextField!
     
@@ -48,6 +51,7 @@ class DetailViewController: UIViewController {
     
     func registerForKeyboardNotifications ()-> Void   {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWasShown:", name: UIKeyboardDidShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillBeHidden:", name: UIKeyboardWillHideNotification, object: nil)
     }
     
@@ -57,6 +61,62 @@ class DetailViewController: UIViewController {
         center.removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
     }
 
+    func keyboardWillShow(notification: NSNotification) {
+        //self.moveTextViewForKeyboard(notification, up:true)
+        self.updateBottomLayoutConstraintWithNotification(notification)
+    }
+    
+    func updateBottomLayoutConstraintWithNotification(notification: NSNotification) {
+        let info = notification.userInfo!
+        
+        let animationDuration = (info[UIKeyboardAnimationDurationUserInfoKey]?.doubleValue)!
+        let keyboardEndFrame = (info[UIKeyboardFrameEndUserInfoKey]?.CGRectValue)!
+        let convertedKeyboardEndFrame = view.convertRect(keyboardEndFrame, fromView:view.window)
+        let rawAnimationCurve = (info[UIKeyboardAnimationCurveUserInfoKey]?.unsignedIntegerValue)! << 16
+        let animationCurve = UIViewAnimationOptions(rawValue:UInt(rawAnimationCurve))
+        entryBottom.constant = CGRectGetMaxY(view.bounds) - CGRectGetMinY(convertedKeyboardEndFrame)
+        
+        UIView.animateWithDuration(animationDuration, delay:0.0, options:[.BeginFromCurrentState, animationCurve], animations:{
+            self.view.layoutIfNeeded()
+        }, completion: nil)
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        self.moveTextViewForKeyboard(notification, up:false)
+    }
+    
+    
+    func moveTextViewForKeyboard(notification: NSNotification, up:Bool) {
+
+        let info : NSDictionary = notification.userInfo!
+
+        let duration = (info[UIKeyboardAnimationDurationUserInfoKey]?.doubleValue)!
+//        let curve = (info[UIKeyboardAnimationCurveUserInfoKey]?.integerValue)!
+
+        var keyboardRect = (info[UIKeyboardFrameEndUserInfoKey]?.CGRectValue)!
+        keyboardRect = self.view.convertRect(keyboardRect, fromView: nil)
+        
+        
+        self.view.setNeedsLayout()
+        self.view.setNeedsUpdateConstraints()
+        
+        UIView.animateWithDuration(duration, animations: {
+            
+            var newTranscriptFrame = self.transcript.frame
+            self.originalTranscriptFrame = self.transcript.frame
+            newTranscriptFrame.size.height -= keyboardRect.size.height
+            self.transcript.frame = newTranscriptFrame
+            
+            var newEntryFrame = self.entry.frame
+            self.originalEntryFrame = self.entry.frame
+            newEntryFrame.origin.y -= keyboardRect.size.height
+            self.entry.frame = newEntryFrame
+            
+        })
+        
+}
+    
+    
     func keyboardWasShown(notification: NSNotification) {
         
         let info : NSDictionary = notification.userInfo!

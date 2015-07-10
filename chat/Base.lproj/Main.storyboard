@@ -34,20 +34,23 @@
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vmN-1i-evX">
                                 <rect key="frame" x="20" y="20" width="560" height="458"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="textColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="send" enablesReturnKeyAutomatically="YES"/>
                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" address="YES" calendarEvent="YES"/>
                             </textView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="st2-z2-fKM">
                                 <rect key="frame" x="20" y="486" width="506" height="30"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hVZ-xz-ZnT">
                                 <rect key="frame" x="534" y="486" width="46" height="30"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="46" id="vD1-PV-VW6"/>
+                                    <constraint firstAttribute="width" constant="46" id="caX-Qe-Dfo"/>
                                 </constraints>
                                 <state key="normal" title="Send"/>
                                 <connections>
@@ -55,17 +58,17 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="vmN-1i-evX" firstAttribute="trailing" secondItem="svH-Pt-448" secondAttribute="trailingMargin" id="17d-xJ-quv"/>
-                            <constraint firstItem="hVZ-xz-ZnT" firstAttribute="top" secondItem="st2-z2-fKM" secondAttribute="top" id="7mx-Oh-8m8"/>
-                            <constraint firstItem="st2-z2-fKM" firstAttribute="top" secondItem="vmN-1i-evX" secondAttribute="bottom" constant="8" symbolic="YES" id="Gnd-we-AeY"/>
-                            <constraint firstItem="vmN-1i-evX" firstAttribute="top" secondItem="svH-Pt-448" secondAttribute="top" constant="20" symbolic="YES" id="Udo-0M-hUK"/>
-                            <constraint firstItem="vmN-1i-evX" firstAttribute="trailing" secondItem="hVZ-xz-ZnT" secondAttribute="trailing" id="eoh-8M-XWF"/>
-                            <constraint firstItem="vmN-1i-evX" firstAttribute="leading" secondItem="st2-z2-fKM" secondAttribute="leading" id="lPA-bI-337"/>
-                            <constraint firstItem="st2-z2-fKM" firstAttribute="leading" secondItem="svH-Pt-448" secondAttribute="leadingMargin" id="m8j-BR-F9c"/>
-                            <constraint firstItem="hVZ-xz-ZnT" firstAttribute="leading" secondItem="st2-z2-fKM" secondAttribute="trailing" constant="8" symbolic="YES" id="qz1-ef-Yig"/>
-                            <constraint firstAttribute="bottom" secondItem="st2-z2-fKM" secondAttribute="bottom" constant="20" symbolic="YES" id="w45-P0-H7f"/>
+                            <constraint firstItem="vmN-1i-evX" firstAttribute="top" secondItem="svH-Pt-448" secondAttribute="top" constant="20" symbolic="YES" id="Au2-OZ-ILx"/>
+                            <constraint firstItem="st2-z2-fKM" firstAttribute="top" secondItem="hVZ-xz-ZnT" secondAttribute="top" id="Gre-WQ-bZc"/>
+                            <constraint firstItem="st2-z2-fKM" firstAttribute="leading" secondItem="svH-Pt-448" secondAttribute="leadingMargin" id="LBg-pf-YAZ"/>
+                            <constraint firstAttribute="bottom" secondItem="st2-z2-fKM" secondAttribute="bottom" constant="20" symbolic="YES" id="TIQ-Fr-9XT"/>
+                            <constraint firstItem="hVZ-xz-ZnT" firstAttribute="trailing" secondItem="vmN-1i-evX" secondAttribute="trailing" id="TP5-Qh-g60"/>
+                            <constraint firstItem="st2-z2-fKM" firstAttribute="top" secondItem="vmN-1i-evX" secondAttribute="bottom" constant="8" symbolic="YES" id="gHg-bm-UBZ"/>
+                            <constraint firstItem="vmN-1i-evX" firstAttribute="trailing" secondItem="svH-Pt-448" secondAttribute="trailingMargin" id="hOj-JC-rtZ"/>
+                            <constraint firstItem="hVZ-xz-ZnT" firstAttribute="leading" secondItem="st2-z2-fKM" secondAttribute="trailing" constant="8" symbolic="YES" id="nae-FK-e9r"/>
+                            <constraint firstItem="st2-z2-fKM" firstAttribute="leading" secondItem="vmN-1i-evX" secondAttribute="leading" id="xUN-lC-RN6"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
@@ -80,6 +83,7 @@
                     <connections>
                         <outlet property="bar" destination="mOI-FS-AaM" id="PsN-jD-pJ1"/>
                         <outlet property="entry" destination="st2-z2-fKM" id="9x6-Na-Qcb"/>
+                        <outlet property="entryBottom" destination="TIQ-Fr-9XT" id="KuX-gD-K7a"/>
                         <outlet property="transcript" destination="vmN-1i-evX" id="XqO-IF-mS1"/>
                     </connections>
                 </viewController>
