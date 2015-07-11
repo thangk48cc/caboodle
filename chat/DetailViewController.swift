@@ -82,6 +82,7 @@ class DetailViewController: UIViewController {
     }
     
     func keyboardWillHide(notification: NSNotification) {
+        NSLog("keyboardWillHide")
         // todo
     }
 }

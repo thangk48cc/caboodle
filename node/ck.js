@@ -42,6 +42,21 @@ var options = { cert: 'cert.pem',
 };
 var apnConnection = new apn.Connection(options);
 
+var tokens = {};
+
+function tokenAdd(whose, token) {
+    if (!tokens[whose]) {
+        tokens[whose] = [];
+    }
+    tokens[whose].add(token);
+}
+
+function tokenDel(whose, token) {
+    if (tokens[whose]) {
+        tokens[whose].remove(token);
+    }
+}
+
 // mongodb
 
 var mongoose = require('mongoose'),
@@ -99,8 +114,7 @@ app.post('/login', bodyParser.json(), function (req, res) {
 				if (password != passwordFromDB) {
 					reject(res, 401, 'login: user ' + who + ' password mismatch: ' + password + ' != ' + passwordFromDB);
 				} else {
-                    req.session.username = who;
-                    res.json(person.friends);
+                    authenticated(req, res, person);
 				}
 			} catch (err) {
                 reject(res, 500, "could not get password from DB. " + err);
@@ -108,6 +122,12 @@ app.post('/login', bodyParser.json(), function (req, res) {
 		}
 	});
 });
+
+function authenticated(req, res, person) {
+    req.session.username = req.body.username;
+    res.json(person.friends);
+    tokens[who].add(req.body.token)
+}
 
 app.get('/logout',function(req,res) {
     req.session.destroy(function(err) {
@@ -137,7 +157,7 @@ app.post('/register', bodyParser.json(), function (req, res) {
                     reject(res, 500, err);
                 } else {
                     console.log('saved ' + who);
-                    req.session.username = who;
+                    authenticated(req, res, person);
                     res.status(204).send();
                 }
             });
@@ -170,6 +190,29 @@ app.post('/push', bodyParser.json(), function (req, res) {
     note.payload = {'messageFrom': 'Caroline'};
   
     apnConnection.pushNotification(note, device);
+});
+
+function push(token, payload) {
+
+    console.log('push to ' + token)
+    var device = new apn.Device(token);
+
+    var note = new apn.Notification();
+  
+    note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
+    note.badge = 3;
+    note.sound = "ping.aiff";
+    note.alert = "\uD83D\uDCE7 \u2709 You have a new message";
+    note.payload = payload;
+  
+    apnConnection.pushNotification(note, device);
+}
+
+app.post('/send', bodyParser.json(), function (req, res) { 
+    console.log('send: ' + util.inspect(req.body))
+    var token = tokens[req.body.addressee];
+    var payload = {'from':req.session.username, 'message':req.body.message};
+    push(token, payload);
 });
 
 function personLoad(who, res, callback) {

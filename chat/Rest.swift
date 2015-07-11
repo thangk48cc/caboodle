@@ -89,7 +89,7 @@ class Rest {
     }
 
     func send(recipient:String, message:String, callback:(success:Bool, message:String) -> Void) {
-        HttpHelper.post(["username":recipient, "message":message], url:serverAddress+"send", callback:{
+        HttpHelper.post(["addressee":recipient, "message":message], url:serverAddress+"send", callback:{
             $1; // noop
             callback(success:$0==200, message:message)
         })
