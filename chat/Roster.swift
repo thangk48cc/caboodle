@@ -19,7 +19,7 @@ class Roster {
 
     func set(friends:[String]?) {
         if let buds = friends {
-            self.contacts = buds.map({ Contact(username: "somebody", displayName: $0) })
+            self.contacts = buds.map({ Contact(username: $0, displayName: $0) })
         } else {
             self.contacts.removeAll()
         }

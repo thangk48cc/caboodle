@@ -9,8 +9,8 @@ class DetailViewController: UIViewController {
 
     
     @IBOutlet weak var bar: UINavigationItem!
-    @IBOutlet weak var entryBottom: NSLayoutConstraint!
     @IBOutlet weak var transcript: UITextView!
+    @IBOutlet weak var entryBottom: NSLayoutConstraint!
     @IBOutlet weak var entry: UITextField!
     
     
@@ -51,7 +51,7 @@ class DetailViewController: UIViewController {
     }
     
     func registerForKeyboardNotifications ()-> Void   {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWasShown:", name: UIKeyboardDidShowNotification, object: nil)
+//        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWasShown:", name: UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillBeHidden:", name: UIKeyboardWillHideNotification, object: nil)
     }
@@ -81,8 +81,8 @@ class DetailViewController: UIViewController {
         }, completion: nil)
     }
     
-    func keyboardWillHide(notification: NSNotification) {
-        NSLog("keyboardWillHide")
+    func keyboardWillBeHidden(notification: NSNotification) {
+        NSLog("keyboardWillBeHidden")
         // todo
     }
 }

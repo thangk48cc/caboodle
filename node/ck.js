@@ -117,6 +117,7 @@ app.post('/login', bodyParser.json(), function (req, res) {
                     authenticated(req, res, person);
 				}
 			} catch (err) {
+                console.log('login error: ' + err);
                 reject(res, 500, "could not get password from DB. " + err);
 			}
 		}

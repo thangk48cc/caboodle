@@ -50,13 +50,13 @@
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="vmN-1i-evX" firstAttribute="trailing" secondItem="st2-z2-fKM" secondAttribute="trailing" id="Ih8-Hs-yVi"/>
-                            <constraint firstItem="st2-z2-fKM" firstAttribute="trailing" secondItem="svH-Pt-448" secondAttribute="trailingMargin" id="L9b-io-SIu"/>
-                            <constraint firstItem="st2-z2-fKM" firstAttribute="leading" secondItem="svH-Pt-448" secondAttribute="leadingMargin" id="Sl4-bF-dRQ"/>
-                            <constraint firstItem="vmN-1i-evX" firstAttribute="leading" secondItem="st2-z2-fKM" secondAttribute="leading" id="XQU-VU-jv4"/>
-                            <constraint firstItem="st2-z2-fKM" firstAttribute="top" secondItem="vmN-1i-evX" secondAttribute="bottom" constant="8" symbolic="YES" id="d0q-Qd-qEh"/>
-                            <constraint firstAttribute="bottom" secondItem="st2-z2-fKM" secondAttribute="bottom" constant="20" symbolic="YES" id="gRg-75-tar"/>
-                            <constraint firstItem="vmN-1i-evX" firstAttribute="top" secondItem="svH-Pt-448" secondAttribute="top" constant="20" symbolic="YES" id="kn7-Ek-sIe"/>
+                            <constraint firstItem="st2-z2-fKM" firstAttribute="trailing" secondItem="svH-Pt-448" secondAttribute="trailingMargin" id="3kB-Rg-YoV"/>
+                            <constraint firstItem="vmN-1i-evX" firstAttribute="top" secondItem="svH-Pt-448" secondAttribute="top" constant="20" symbolic="YES" id="A4c-d9-GN5"/>
+                            <constraint firstItem="st2-z2-fKM" firstAttribute="top" secondItem="vmN-1i-evX" secondAttribute="bottom" constant="8" symbolic="YES" id="Jxo-Jw-eLv"/>
+                            <constraint firstItem="st2-z2-fKM" firstAttribute="trailing" secondItem="vmN-1i-evX" secondAttribute="trailing" id="Spu-UH-Wck"/>
+                            <constraint firstAttribute="bottom" secondItem="st2-z2-fKM" secondAttribute="bottom" constant="20" symbolic="YES" id="aGD-Pg-lci"/>
+                            <constraint firstItem="st2-z2-fKM" firstAttribute="leading" secondItem="svH-Pt-448" secondAttribute="leadingMargin" id="fj3-LI-Npb"/>
+                            <constraint firstItem="st2-z2-fKM" firstAttribute="leading" secondItem="vmN-1i-evX" secondAttribute="leading" id="n1D-37-xi4"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
@@ -71,6 +71,7 @@
                     <connections>
                         <outlet property="bar" destination="mOI-FS-AaM" id="PsN-jD-pJ1"/>
                         <outlet property="entry" destination="st2-z2-fKM" id="9x6-Na-Qcb"/>
+                        <outlet property="entryBottom" destination="aGD-Pg-lci" id="Eqv-eP-WdM"/>
                         <outlet property="transcript" destination="vmN-1i-evX" id="XqO-IF-mS1"/>
                     </connections>
                 </viewController>
