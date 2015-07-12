@@ -7,6 +7,7 @@ class DetailViewController: UIViewController {
     var originalTranscriptFrame: CGRect?
     var originalEntryFrame: CGRect?
 
+    static var theDetail : DetailViewController?
     
     @IBOutlet weak var bar: UINavigationItem!
     @IBOutlet weak var transcript: UITextView!
@@ -16,6 +17,7 @@ class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        DetailViewController.theDetail = self
         self.bar.title = peer?.username
         self.entry.addTarget(self, action: "send:", forControlEvents: .EditingDidEndOnExit)
     }
@@ -27,6 +29,7 @@ class DetailViewController: UIViewController {
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(true)
+        DetailViewController.theDetail = nil
         self.deregisterFromKeyboardNotifications()
     }
 
@@ -40,6 +43,14 @@ class DetailViewController: UIViewController {
         
         transcript.text = transcript.text + "\nme: " + self.entry.text!
         self.entry.text?.removeAll()
+    }
+    
+    func incoming(userInfo: [NSObject : AnyObject]) {
+        NSLog("incoming " + String(userInfo.dynamicType) + " : " + userInfo.description)
+        let from = userInfo["from"] as! String
+        let message = userInfo["message"] as! String
+        let update = self.transcript.text + "\n" + from + ": " + message
+        self.transcript.text = update
     }
     
     @IBAction func unfriend(sender: AnyObject) {

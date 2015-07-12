@@ -7,6 +7,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
+        if let notification = launchOptions?[UIApplicationLaunchOptionsLocalNotificationKey] as! UILocalNotification! {
+            
+            NSLog("local notification " + notification.description)
+            
+        } else if let notification = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as! NSDictionary! {
+
+            NSLog("remote notification " + notification.description)
+
+        }
+        
+        
         // set up UI
         let splitViewController = self.window!.rootViewController as! UISplitViewController
         let navigationController = splitViewController.viewControllers[splitViewController.viewControllers.count-1] as! UINavigationController
@@ -34,31 +45,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     }
 
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
-        // inspect notificationSettings to see what the user said!
+        // inspect notificationSettings to see what the user said
         let settings = UIApplication.sharedApplication().currentUserNotificationSettings()
         print("notification settings = " + settings!.description)
     }
 
-    func applicationWillResignActive(application: UIApplication) {
-        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-        // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-    }
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
 
-    func applicationDidEnterBackground(application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        NSLog("didReceiveRemoteNotification " + userInfo.description)
+        
+        if application.applicationState == UIApplicationState.Inactive || application.applicationState == UIApplicationState.Background {
+            //opened from a push notification when the app was on background
+        } else {
+            DetailViewController.theDetail?.incoming(userInfo)
+        }
     }
+    
+    func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
 
-    func applicationWillEnterForeground(application: UIApplication) {
-        // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-    }
+        NSLog("didReceiveRemoteNotification " + notification.description)
+        
+        if application.applicationState == UIApplicationState.Inactive || application.applicationState == UIApplicationState.Background {
 
-    func applicationDidBecomeActive(application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    }
-
-    func applicationWillTerminate(application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+            //opened from a push notification when the app was on background
+            NSLog("\topened from a push notification when the app was on background")
+        }
     }
 
     // MARK: - Split view

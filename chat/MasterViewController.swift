@@ -18,6 +18,9 @@ class MasterViewController: UITableViewController {
         }
         self.tableView.backgroundView = nil;
         self.tableView.backgroundColor = UIColor.blackColor();
+        
+//        let initialIndexPath = NSIndexPath(forRow: 1, inSection: 0)
+//        self.performSegueWithIdentifier("showDetail", sender: initialIndexPath)
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -25,6 +28,10 @@ class MasterViewController: UITableViewController {
         super.viewWillAppear(animated)
 
         Rest.sharedInstance.reauth(reauthed)
+        
+        
+//        let initialIndexPath = NSIndexPath(forRow: 1, inSection: 0)
+//        self.tableView.selectRowAtIndexPath(initialIndexPath, animated: true, scrollPosition:UITableViewScrollPosition.None)
     }
     
     func reauthed(success:Bool, friends:[String]?) {
@@ -89,18 +96,44 @@ class MasterViewController: UITableViewController {
     
     // MARK: - Segues
 
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
         if segue.identifier == "showDetail" {
-            if let indexPath = self.tableView.indexPathForSelectedRow {
-                let object = Roster.sharedInstance.contacts[indexPath.row]
-                let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
-                controller.master = self
-                controller.peer = object
-                controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
-                controller.navigationItem.leftItemsSupplementBackButton = true
+
+            var row = -1
+
+            if (sender!.isKindOfClass(UITableViewCell)) {
+                row = (self.tableView.indexPathForSelectedRow?.row)!
+            } else if (sender!.isKindOfClass(NSIndexPath)) {
+                row = sender!.row
+            } else {
+                assert(false)
             }
+
+            let object = Roster.sharedInstance.contacts[row]
+            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
+            controller.master = self
+            controller.peer = object
+            controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+            controller.navigationItem.leftItemsSupplementBackButton = true
         }
     }
+
+    
+//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+//    
+//        if segue.identifier == "showDetail" {
+//            if let indexPath = self.tableView.indexPathForSelectedRow {
+//                let object = Roster.sharedInstance.contacts[indexPath.row]
+//                let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
+//                controller.master = self
+//                controller.peer = object
+//                controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+//                controller.navigationItem.leftItemsSupplementBackButton = true
+//            }
+//        }
+//    }
 
     // MARK: - Table View
 
@@ -134,7 +167,5 @@ class MasterViewController: UITableViewController {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
         }
     }
-
-
 }
 
