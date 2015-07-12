@@ -197,12 +197,8 @@ app.post('/push', bodyParser.json(), function (req, res) {
 
     var token = req.body.token;
     console.log('push to ...' + token + '...')
-    console.log('typeof ' + typeof token);
-    var token2 = new Buffer(token.replace(/[^0-9a-f]/gi, ""), "hex");
-    console.log('t2 = .' + token2 + '.');
 
     var device = new apn.Device(token);
-
     var note = new apn.Notification();
   
     note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
@@ -218,12 +214,7 @@ function push(token, payload) {
 
     console.log('push to ---' + token + '---')
 
-    console.log('typeof ' + typeof token);
-    var token2 = new Buffer(token.replace(/[^0-9a-f]/gi, ""), "hex");
-    console.log('t2 = .' + token2 + '.');
-
     var device = new apn.Device(token);
-
     var note = new apn.Notification();
     note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
     note.badge = 3;
