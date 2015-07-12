@@ -33,6 +33,23 @@ Array.prototype.remove = function(k) {
     }
 }
 
+if (!Array.prototype.forEach)
+{
+   Array.prototype.forEach = function(fun /*, thisp*/)
+   {
+      var len = this.length;
+      if (typeof fun != "function")
+      throw new TypeError();
+      
+      var thisp = arguments[1];
+      for (var i = 0; i < len; i++)
+      {
+         if (i in this)
+         fun.call(thisp, this[i], i, this);
+      }
+   };
+}
+
 // apns
 
 var options = { cert: 'cert.pem',
@@ -114,7 +131,7 @@ app.post('/login', bodyParser.json(), function (req, res) {
 				if (password != passwordFromDB) {
 					reject(res, 401, 'login: user ' + who + ' password mismatch: ' + password + ' != ' + passwordFromDB);
 				} else {
-                    authenticated(req, res, person);
+                    authenticated(req, res, who, person);
 				}
 			} catch (err) {
                 console.log('login error: ' + err);
@@ -124,10 +141,10 @@ app.post('/login', bodyParser.json(), function (req, res) {
 	});
 });
 
-function authenticated(req, res, person) {
+function authenticated(req, res, who, person) {
     req.session.username = req.body.username;
     res.json(person.friends);
-    tokens[who].add(req.body.token)
+    tokenAdd(who, req.body.pushToken)
 }
 
 app.get('/logout',function(req,res) {
@@ -158,7 +175,7 @@ app.post('/register', bodyParser.json(), function (req, res) {
                     reject(res, 500, err);
                 } else {
                     console.log('saved ' + who);
-                    authenticated(req, res, person);
+                    authenticated(req, res, who, person);
                     res.status(204).send();
                 }
             });
@@ -179,9 +196,9 @@ app.post('/push', bodyParser.json(), function (req, res) {
     console.log('body: ' + util.inspect(req.body))
 
     var token = req.body.token;
-    console.log('push to ' + token)
-    var device = new apn.Device(token);
+    console.log('push to ...' + token + '...')
 
+    var device = new apn.Device(token);
     var note = new apn.Notification();
   
     note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
@@ -195,11 +212,10 @@ app.post('/push', bodyParser.json(), function (req, res) {
 
 function push(token, payload) {
 
-    console.log('push to ' + token)
-    var device = new apn.Device(token);
+    console.log('push to ---' + token + '---')
 
+    var device = new apn.Device(token);
     var note = new apn.Notification();
-  
     note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
     note.badge = 3;
     note.sound = "ping.aiff";
@@ -211,9 +227,10 @@ function push(token, payload) {
 
 app.post('/send', bodyParser.json(), function (req, res) { 
     console.log('send: ' + util.inspect(req.body))
-    var token = tokens[req.body.addressee];
-    var payload = {'from':req.session.username, 'message':req.body.message};
-    push(token, payload);
+    tokens[req.body.addressee].forEach( function (token, index, array) {
+    	var payload = {'from':req.session.username, 'message':req.body.message};
+    	push(token, payload);
+    });
 });
 
 function personLoad(who, res, callback) {
