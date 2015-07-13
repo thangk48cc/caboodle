@@ -19,7 +19,14 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         DetailViewController.theDetail = self
         self.bar.title = peer?.username
+        Roster.sharedInstance.clear(peer!.username)
         self.entry.addTarget(self, action: "send:", forControlEvents: .EditingDidEndOnExit)
+        
+        Rest.sharedInstance.load((peer?.username)!, callback: {
+            if ($0 != nil) {
+                self.transcript.text = $0!
+            }
+        })
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -43,14 +50,18 @@ class DetailViewController: UIViewController {
         
         transcript.text = transcript.text + "\nme: " + self.entry.text!
         self.entry.text?.removeAll()
+        
+        Rest.sharedInstance.store((peer?.username)!, value: transcript.text)
     }
     
     func incoming(userInfo: [NSObject : AnyObject]) {
-        NSLog("incoming " + String(userInfo.dynamicType) + " : " + userInfo.description)
+        NSLog("detail incoming " + String(userInfo.dynamicType) + " : " + userInfo.description)
         let from = userInfo["from"] as! String
-        let message = userInfo["message"] as! String
-        let update = self.transcript.text + "\n" + from + ": " + message
-        self.transcript.text = update
+        if from == self.peer?.username {
+            let message = userInfo["message"] as! String
+            let update = self.transcript.text + "\n" + from + ": " + message
+            self.transcript.text = update
+        }
     }
     
     @IBAction func unfriend(sender: AnyObject) {

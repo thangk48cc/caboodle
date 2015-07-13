@@ -2,8 +2,10 @@ import UIKit
 
 class MasterViewController: UITableViewController {
 
+    static var theMaster : MasterViewController?
+
     var detailViewController: DetailViewController? = nil
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -26,7 +28,7 @@ class MasterViewController: UITableViewController {
     override func viewWillAppear(animated: Bool) {
         self.clearsSelectionOnViewWillAppear = self.splitViewController!.collapsed
         super.viewWillAppear(animated)
-
+        MasterViewController.theMaster = self
         Rest.sharedInstance.reauth(reauthed)
         
         
@@ -34,6 +36,11 @@ class MasterViewController: UITableViewController {
 //        self.tableView.selectRowAtIndexPath(initialIndexPath, animated: true, scrollPosition:UITableViewScrollPosition.None)
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(true)
+        MasterViewController.theMaster = nil
+    }
+
     func reauthed(success:Bool, friends:[String]?) {
         if success {
             self.rosterUpdate(friends)
@@ -120,7 +127,15 @@ class MasterViewController: UITableViewController {
         }
     }
 
-    
+    func incoming(userInfo: [NSObject : AnyObject]) {
+        NSLog("Master incoming " + String(userInfo.dynamicType) + " : " + userInfo.description)
+        let from = userInfo["from"] as! String
+        if from != self.detailViewController?.peer?.username { // not current conversation
+            Roster.sharedInstance.increment(from)
+            self.tableView.reloadData()
+        }
+    }
+
 //    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
 //    
 //        if segue.identifier == "showDetail" {
@@ -148,7 +163,8 @@ class MasterViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
-        cell.textLabel!.text = Roster.sharedInstance.contacts[indexPath.row].displayName
+        let contact = Roster.sharedInstance.contacts[indexPath.row]
+        cell.textLabel!.text = contact.displayName + " (" + String(contact.unread) + ")"
         cell.textLabel!.textColor = UIColor.orangeColor()
         cell.backgroundColor = UIColor.blackColor()
         return cell

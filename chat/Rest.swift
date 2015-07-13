@@ -67,7 +67,7 @@ class Rest {
     
     func logout(callback:((success:Bool) -> Void)?=nil) {
         HttpHelper.get(nil, url:serverAddress+"logout", callback:{
-            callback?(success:($0 == 200));
+            callback?(success:($0 == 204));
             $1;
         });
         
@@ -91,7 +91,26 @@ class Rest {
     func send(recipient:String, message:String, callback:(success:Bool, message:String) -> Void) {
         HttpHelper.post(["addressee":recipient, "message":message], url:serverAddress+"send", callback:{
             $1; // noop
-            callback(success:$0==200, message:message)
+            callback(success:$0==204, message:message)
         })
+    }
+    
+    // todo: store/load AnyObject
+    func store(key:String, value:String, callback:((success:Bool) -> Void)?=nil) {
+        HttpHelper.post(["key":key, "value":value], url:serverAddress+"send", callback:{
+            $1; // noop
+            callback?(success:$0==204)
+        })
+    }
+    
+    func load(key:String, callback:(value:String?) -> Void) {
+        HttpHelper.get(nil, url:serverAddress+"load", callback:{
+            if $0 == 200 {
+                let response = $1 as! String
+                callback(value: response)
+            } else {
+                callback(value: nil)
+            }
+        });
     }
 }

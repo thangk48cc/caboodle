@@ -8,15 +8,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
         if let notification = launchOptions?[UIApplicationLaunchOptionsLocalNotificationKey] as! UILocalNotification! {
-            
             NSLog("local notification " + notification.description)
-            
         } else if let notification = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as! NSDictionary! {
-
             NSLog("remote notification " + notification.description)
-
         }
-        
         
         // set up UI
         let splitViewController = self.window!.rootViewController as! UISplitViewController
@@ -55,20 +50,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         NSLog("didReceiveRemoteNotification " + userInfo.description)
         
         if application.applicationState == UIApplicationState.Inactive || application.applicationState == UIApplicationState.Background {
-            //opened from a push notification when the app was on background
+            NSLog("\topened from a remote push notification when the app was on background: " + userInfo.description)
         } else {
+            MasterViewController.theMaster?.incoming(userInfo)
             DetailViewController.theDetail?.incoming(userInfo)
         }
     }
     
     func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
-
         NSLog("didReceiveRemoteNotification " + notification.description)
-        
         if application.applicationState == UIApplicationState.Inactive || application.applicationState == UIApplicationState.Background {
-
             //opened from a push notification when the app was on background
-            NSLog("\topened from a push notification when the app was on background")
+            NSLog("\topened from a local push notification when the app was on background")
         }
     }
 

@@ -92,6 +92,12 @@ var PersonSchema = new Schema({
 }, { "collection": "persons" });
 var PersonModel = mongoose.model('Person', PersonSchema);
 
+var StorageSchema = new Schema({
+    key  : String,
+    value: String
+}, { "collection": "storage" });
+var StorageModel = mongoose.model('Storage', StorageSchema);
+
 
 // express
 
@@ -230,6 +236,34 @@ app.post('/send', bodyParser.json(), function (req, res) {
     tokens[req.body.addressee].forEach( function (token, index, array) {
     	var payload = {'from':req.session.username, 'message':req.body.message};
     	push(token, payload);
+    });
+});
+
+app.post('/store', bodyParser.json(), function (req, res) { 
+    console.log('store: ' + util.inspect(req.body))
+
+    var storage = new StorageModel();
+    storage.key = req.session.username + "." + req.body.key
+    storage.value = req.body.value
+    storage.save(function (err) {
+        if (err) {
+            reject(res, 500, err);
+        } else {
+            console.log('saved ' + storage.key);
+            res.status(204).send();
+        }    
+    });
+});
+
+app.post('/load', bodyParser.json(), function (req, res) { 
+    console.log('load: ' + util.inspect(req.body))
+
+    StorageModel.find({key:req.body.key}, function (err, docs) {
+        if (err) {
+            reject(res, 500, err);
+        } else if (docs.length != 0) {
+            callback(docs[0]);
+        }    
     });
 });
 
