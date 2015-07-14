@@ -41,8 +41,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
         // inspect notificationSettings to see what the user said
-        let settings = UIApplication.sharedApplication().currentUserNotificationSettings()
-        print("notification settings = " + settings!.description)
+//        let settings = UIApplication.sharedApplication().currentUserNotificationSettings()
+//        print("notification settings = " + settings!.description)
     }
 
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {

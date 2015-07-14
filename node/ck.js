@@ -93,8 +93,9 @@ var PersonSchema = new Schema({
 var PersonModel = mongoose.model('Person', PersonSchema);
 
 var StorageSchema = new Schema({
-    key  : String,
-    value: String
+    name    : String,
+    key     : String,
+    value   : String
 }, { "collection": "storage" });
 var StorageModel = mongoose.model('Storage', StorageSchema);
 
@@ -182,7 +183,6 @@ app.post('/register', bodyParser.json(), function (req, res) {
                 } else {
                     console.log('saved ' + who);
                     authenticated(req, res, who, person);
-                    res.status(204).send();
                 }
             });
         }
@@ -233,7 +233,7 @@ function push(token, payload) {
 
 app.post('/send', bodyParser.json(), function (req, res) { 
     console.log('send: ' + util.inspect(req.body))
-    tokens[req.body.addressee].forEach( function (token, index, array) {
+        tokens[req.body.addressee].forEach( function (token, index, array) {
     	var payload = {'from':req.session.username, 'message':req.body.message};
     	push(token, payload);
     });
@@ -243,7 +243,8 @@ app.post('/store', bodyParser.json(), function (req, res) {
     console.log('store: ' + util.inspect(req.body))
 
     var storage = new StorageModel();
-    storage.key = req.session.username + "." + req.body.key
+    storage.name = req.session.username
+    storage.key = req.body.key
     storage.value = req.body.value
     storage.save(function (err) {
         if (err) {
@@ -256,14 +257,22 @@ app.post('/store', bodyParser.json(), function (req, res) {
 });
 
 app.post('/load', bodyParser.json(), function (req, res) { 
-    console.log('load: ' + util.inspect(req.body))
+    console.log('load: ' + util.inspect(req.query))
 
-    StorageModel.find({key:req.body.key}, function (err, docs) {
+    var n = req.session.username
+    var k = req.body.key
+    console.log('load ' + n +','+ k)
+    StorageModel.find({name :n, key:k}, function (err, docs) {
         if (err) {
             reject(res, 500, err);
         } else if (docs.length != 0) {
-            callback(docs[0]);
-        }    
+            console.log('\load result : ' + docs[0].value)
+            res.json({'value':docs[0].value});
+            //res.send(docs[0].value);
+        } else {
+            console.log('no docs')
+            res.status(404)
+        }
     });
 });
 

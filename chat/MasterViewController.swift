@@ -58,7 +58,7 @@ class MasterViewController: UITableViewController {
 
     func loginPopup() {
         Login.popup(self.parentViewController!, callback: {
-        self.rosterUpdate($1)
+            self.rosterUpdate($1)
         });
     }
 
@@ -164,7 +164,8 @@ class MasterViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
         let contact = Roster.sharedInstance.contacts[indexPath.row]
-        cell.textLabel!.text = contact.displayName + " (" + String(contact.unread) + ")"
+        let unread = contact.unread == 0 ? "" : " (" + String(contact.unread) + ")"
+        cell.textLabel!.text = contact.displayName + unread
         cell.textLabel!.textColor = UIColor.orangeColor()
         cell.backgroundColor = UIColor.blackColor()
         return cell

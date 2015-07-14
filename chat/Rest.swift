@@ -2,8 +2,8 @@ import Foundation
 
 class Rest {
     
-    //let serverAddress = "http://127.0.0.1:3000/"
-    let serverAddress = "http://45.55.12.220:3000/"
+    let serverAddress = "http://127.0.0.1:3000/"
+    //let serverAddress = "http://45.55.12.220:3000/"
     
     var pushToken: String? = nil
     var reauthed: LoginCallback? = nil
@@ -97,17 +97,17 @@ class Rest {
     
     // todo: store/load AnyObject
     func store(key:String, value:String, callback:((success:Bool) -> Void)?=nil) {
-        HttpHelper.post(["key":key, "value":value], url:serverAddress+"send", callback:{
+        HttpHelper.post(["key":key, "value":value], url:serverAddress+"store", callback:{
             $1; // noop
             callback?(success:$0==204)
         })
     }
     
     func load(key:String, callback:(value:String?) -> Void) {
-        HttpHelper.get(nil, url:serverAddress+"load", callback:{
+        HttpHelper.post(["key":key], url:serverAddress+"load", callback:{
             if $0 == 200 {
-                let response = $1 as! String
-                callback(value: response)
+                let response = $1 as! [String:String]
+                callback(value: response["value"])
             } else {
                 callback(value: nil)
             }

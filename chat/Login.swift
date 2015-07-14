@@ -88,6 +88,7 @@ class Login {
                 self.challenge()
             })
         }
+            
         self.callback!(success:true, friends:friends)
     }
 
