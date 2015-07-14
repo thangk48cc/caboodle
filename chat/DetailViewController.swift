@@ -23,8 +23,10 @@ class DetailViewController: UIViewController {
         self.entry.addTarget(self, action: "send:", forControlEvents: .EditingDidEndOnExit)
         
         Rest.sharedInstance.load((peer?.username)!, callback: {
-            if ($0 != nil) {
-                self.transcript.text = $0!
+            if let loaded = $0 {
+                dispatch_async(dispatch_get_main_queue(),{
+                    self.transcript.text = loaded
+                })
             }
         })
     }

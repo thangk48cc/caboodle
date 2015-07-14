@@ -242,19 +242,32 @@ app.post('/send', bodyParser.json(), function (req, res) {
 app.post('/store', bodyParser.json(), function (req, res) { 
     console.log('store: ' + util.inspect(req.body))
 
-    var storage = new StorageModel();
-    storage.name = req.session.username
-    storage.key = req.body.key
-    storage.value = req.body.value
-    storage.save(function (err) {
+    var query = {'name':req.session.username, 'key':req.body.key};
+    var update = {value: req.body.value};
+    var options = {upsert: true};
+    Storage.findOneAndUpdate(query, update, options, function(err, person) {
         if (err) {
             reject(res, 500, err);
         } else {
             console.log('saved ' + storage.key);
-            res.status(204).send();
-        }    
+           
+        }
     });
-});
+});    
+    
+//    var storage = new StorageModel();
+//    storage.name = req.session.username
+//    storage.key = req.body.key
+//    storage.value = req.body.value
+//    storage.save(function (err) {
+//        if (err) {
+//            reject(res, 500, err);
+//        } else {
+//            console.log('saved ' + storage.key);
+//            res.status(204).send();
+//        }    
+//    });
+//});
 
 app.post('/load', bodyParser.json(), function (req, res) { 
     console.log('load: ' + util.inspect(req.query))
