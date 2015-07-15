@@ -63,6 +63,7 @@ class DetailViewController: UIViewController {
             let message = userInfo["message"] as! String
             let update = self.transcript.text + "\n" + from + ": " + message
             self.transcript.text = update
+            Rest.sharedInstance.store((peer?.username)!, value: transcript.text)
         }
     }
     
