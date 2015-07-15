@@ -136,8 +136,8 @@
 				05190D6E1B482AE4002F52F5 /* Rest.swift */,
 				05190D6F1B482AE4002F52F5 /* Roster.swift */,
 				05190D701B482AE4002F52F5 /* Util.swift */,
-				05190D7B1B4832E9002F52F5 /* CK-Bridging-Header.h */,
 				054FD2421B56AE830027C2DF /* Reachability.swift */,
+				05190D7B1B4832E9002F52F5 /* CK-Bridging-Header.h */,
 			);
 			name = shared;
 			path = chat;
