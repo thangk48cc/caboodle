@@ -13,7 +13,7 @@ class HttpHelper {
     }
 
     static func request(method:String, params : Dictionary<String, String>?, url : String, callback:Callback) {
-        
+
         print(method + " " + url);
         
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
@@ -34,6 +34,14 @@ class HttpHelper {
         // make the request
         let task = session.dataTaskWithRequest(request, completionHandler: { data0, response, error -> Void in
 
+            if error != nil {
+                if error!.domain == NSURLErrorDomain && error!.code == NSURLErrorTimedOut {
+                    print("timed out") // note, `response` is likely `nil` if it timed out
+                } else {
+                    print("HTTP error : " + error!.description)
+                }
+            }
+            
             if response != nil {
             
                 // parse the response
@@ -59,5 +67,20 @@ class HttpHelper {
         })
         
         task!.resume()
+    }
+    
+    class func monitorReachability(serverAddress:String) {
+//        let reachability = Reachability.reachabilityForInternetConnection()
+        if let reachability = Reachability(hostname:serverAddress) {
+            reachability.whenReachable = { reachability in
+                print("reachable")
+            }
+            reachability.whenUnreachable = { reachability in
+                print("Not reachable")
+            }
+            reachability.startNotifier()
+        } else {
+            print("reachability can't even")
+        }
     }
 }

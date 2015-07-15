@@ -9,6 +9,7 @@ class DetailViewController: UIViewController {
 
     static var theDetail : DetailViewController?
     
+
     @IBOutlet weak var bar: UINavigationItem!
     @IBOutlet weak var transcript: UITextView!
     @IBOutlet weak var entryBottom: NSLayoutConstraint!
@@ -56,6 +57,13 @@ class DetailViewController: UIViewController {
         Rest.sharedInstance.store((peer?.username)!, value: transcript.text)
     }
     
+    @IBAction func call(sender: AnyObject) {
+        let receiver = (peer?.username)!
+        Rest.sharedInstance.call(receiver, callback:{
+           print("call success " + String($0) + " " + String($1))
+        });
+    }
+
     func incoming(userInfo: [NSObject : AnyObject]) {
         NSLog("detail incoming " + String(userInfo.dynamicType) + " : " + userInfo.description)
         let from = userInfo["from"] as! String

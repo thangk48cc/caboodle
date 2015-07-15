@@ -23,6 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         UIApplication.sharedApplication().registerForRemoteNotifications()
         let settings = UIUserNotificationSettings(forTypes: .Alert, categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+
+        HttpHelper.monitorReachability(Rest.sharedInstance.serverAddress)
         
         return true
     }

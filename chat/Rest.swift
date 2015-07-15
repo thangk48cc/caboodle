@@ -1,22 +1,25 @@
 import Foundation
 
 class Rest {
+
+    
+    enum Status { case Ok, NotFound }
     
     //let serverAddress = "http://127.0.0.1:3000/"
     let serverAddress = "http://45.55.12.220:3000/"
-    
+
     var pushToken: String? = nil
     var reauthed: LoginCallback? = nil
 
     static let sharedInstance = Rest()
-    
+
     typealias LoginCallback = (success:Bool, friends:[String]?) -> Void;
-    
+
     func setPushToken(token:NSData) {
         self.pushToken = token.hexadecimalString
         self.reauth()
     }
-    
+
     func register(username:String, password:String, callback:(success:Bool, friends:[String]?) -> Void) {
         return auth("register", username:username, password:password, callback:callback);
     }
@@ -40,7 +43,7 @@ class Rest {
         }
         self.login(creds.username, password: creds.password, callback:self.reauthed!)
     }
-    
+
     func auth(endpoint:String, username:String, password:String, callback:((success:Bool, friends:[String]?) -> Void)) {
         let credentials = ["username":username, "password":password, "pushToken":self.pushToken!]
         HttpHelper.post(credentials, url:serverAddress + endpoint, callback:{
@@ -54,32 +57,21 @@ class Rest {
         })
     }
 
-//    func getRoster(callback:(contacts:[String]?) -> Void) {
-//        HttpHelper.get(nil, url:serverAddress+"roster", callback:{
-//            if $0 == 200 {
-//                let response = $1 as! [String]
-//                callback(contacts: response)
-//            } else {
-//                callback(contacts: nil)
-//            }
-//        })
-//    }
-    
     func logout(callback:((success:Bool) -> Void)?=nil) {
         HttpHelper.get(nil, url:serverAddress+"logout", callback:{
             callback?(success:($0 == 204));
             $1;
         });
-        
+
         do {
             try Locksmith.deleteDataForUserAccount("ClearKeep")
         } catch let error as NSError {
             print("could not remove from keychain: " + String(error))
         }
     }
-    
+
     func befriend(friend:String, foreva:Bool, callback:(friends:[String]) -> Void) {
-        
+
         let action = (foreva ? "add" : "del")
         HttpHelper.post(["username":friend, "action":action], url:serverAddress+"befriend", callback:{
             if $0 == 200 {
@@ -94,7 +86,7 @@ class Rest {
             callback(success:$0==204, message:message)
         })
     }
-    
+
     // todo: store/load AnyObject
     func store(key:String, value:String, callback:((success:Bool) -> Void)?=nil) {
         HttpHelper.post(["key":key, "value":value], url:serverAddress+"store", callback:{
@@ -102,7 +94,7 @@ class Rest {
             callback?(success:$0==204)
         })
     }
-    
+
     func load(key:String, callback:(value:String?) -> Void) {
         HttpHelper.post(["key":key], url:serverAddress+"load", callback:{
             if $0 == 200 {
@@ -110,6 +102,17 @@ class Rest {
                 callback(value: response["value"])
             } else {
                 callback(value: nil)
+            }
+        });
+    }
+
+    func call(receiver:String, callback:(success:Bool, port:Int) -> Void) {
+        HttpHelper.post(["receiver":receiver], url:serverAddress+"call", callback:{
+            if $0 == 200 {
+                let response = $1 as! [String:Int]
+                callback(success:true, port:response["port"]!)
+            } else {
+                callback(success:false, port:0)
             }
         });
     }

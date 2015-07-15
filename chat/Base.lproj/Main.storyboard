@@ -41,22 +41,34 @@
                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" address="YES" calendarEvent="YES"/>
                             </textView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="st2-z2-fKM">
-                                <rect key="frame" x="20" y="486" width="560" height="30"/>
+                                <rect key="frame" x="74" y="486" width="506" height="30"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="textColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="send" enablesReturnKeyAutomatically="YES"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zFW-8B-6uI">
+                                <rect key="frame" x="20" y="485" width="46" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="46" id="H9C-UG-No2"/>
+                                </constraints>
+                                <state key="normal" title="Call"/>
+                                <connections>
+                                    <action selector="call:" destination="JEX-9P-axG" eventType="touchUpInside" id="T4x-eX-lUJ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="st2-z2-fKM" firstAttribute="trailing" secondItem="svH-Pt-448" secondAttribute="trailingMargin" id="3kB-Rg-YoV"/>
-                            <constraint firstItem="vmN-1i-evX" firstAttribute="top" secondItem="svH-Pt-448" secondAttribute="top" constant="20" symbolic="YES" id="A4c-d9-GN5"/>
-                            <constraint firstItem="st2-z2-fKM" firstAttribute="top" secondItem="vmN-1i-evX" secondAttribute="bottom" constant="8" symbolic="YES" id="Jxo-Jw-eLv"/>
-                            <constraint firstItem="st2-z2-fKM" firstAttribute="trailing" secondItem="vmN-1i-evX" secondAttribute="trailing" id="Spu-UH-Wck"/>
-                            <constraint firstAttribute="bottom" secondItem="st2-z2-fKM" secondAttribute="bottom" constant="20" symbolic="YES" id="aGD-Pg-lci"/>
-                            <constraint firstItem="st2-z2-fKM" firstAttribute="leading" secondItem="svH-Pt-448" secondAttribute="leadingMargin" id="fj3-LI-Npb"/>
-                            <constraint firstItem="st2-z2-fKM" firstAttribute="leading" secondItem="vmN-1i-evX" secondAttribute="leading" id="n1D-37-xi4"/>
+                            <constraint firstItem="vmN-1i-evX" firstAttribute="trailing" secondItem="svH-Pt-448" secondAttribute="trailingMargin" id="464-fH-soC"/>
+                            <constraint firstItem="zFW-8B-6uI" firstAttribute="leading" secondItem="vmN-1i-evX" secondAttribute="leading" id="JcZ-gX-dOY"/>
+                            <constraint firstItem="st2-z2-fKM" firstAttribute="leading" secondItem="zFW-8B-6uI" secondAttribute="trailing" constant="8" symbolic="YES" id="PmA-uy-nhR"/>
+                            <constraint firstItem="zFW-8B-6uI" firstAttribute="leading" secondItem="svH-Pt-448" secondAttribute="leadingMargin" id="R6L-mP-10h"/>
+                            <constraint firstItem="st2-z2-fKM" firstAttribute="top" secondItem="vmN-1i-evX" secondAttribute="bottom" constant="8" symbolic="YES" id="Uqn-CY-HTZ"/>
+                            <constraint firstItem="st2-z2-fKM" firstAttribute="trailing" secondItem="vmN-1i-evX" secondAttribute="trailing" id="dtZ-1F-2QN"/>
+                            <constraint firstItem="vmN-1i-evX" firstAttribute="top" secondItem="svH-Pt-448" secondAttribute="top" constant="20" symbolic="YES" id="eWn-vh-Zrv"/>
+                            <constraint firstItem="zFW-8B-6uI" firstAttribute="baseline" secondItem="st2-z2-fKM" secondAttribute="baseline" id="g4a-Oz-zPz"/>
+                            <constraint firstAttribute="bottom" secondItem="st2-z2-fKM" secondAttribute="bottom" constant="20" symbolic="YES" id="n59-fB-ybf"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
@@ -71,7 +83,6 @@
                     <connections>
                         <outlet property="bar" destination="mOI-FS-AaM" id="PsN-jD-pJ1"/>
                         <outlet property="entry" destination="st2-z2-fKM" id="9x6-Na-Qcb"/>
-                        <outlet property="entryBottom" destination="aGD-Pg-lci" id="Eqv-eP-WdM"/>
                         <outlet property="transcript" destination="vmN-1i-evX" id="XqO-IF-mS1"/>
                     </connections>
                 </viewController>
