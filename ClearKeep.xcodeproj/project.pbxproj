@@ -24,7 +24,6 @@
 		054FD2481B578F7F0027C2DF /* Locksmith.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053D91A81B48D7C800560B7F /* Locksmith.swift */; };
 		054FD2491B578F840027C2DF /* LocksmithRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053D91AA1B48D7DE00560B7F /* LocksmithRequest.swift */; };
 		054FD24A1B578F880027C2DF /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05190D701B482AE4002F52F5 /* Util.swift */; };
-		054FD24B1B578F8C0027C2DF /* CK-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = 05190D7B1B4832E9002F52F5 /* CK-Bridging-Header.h */; };
 		054FD24C1B578F900027C2DF /* Crypt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05190D661B482AC8002F52F5 /* Crypt.swift */; };
 		058B29B51B4731910069C2D4 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058B29B41B4731910069C2D4 /* MasterViewController.swift */; };
 		058B29B71B4731910069C2D4 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058B29B61B4731910069C2D4 /* DetailViewController.swift */; };
@@ -336,7 +335,6 @@
 			files = (
 				05B4B7E41B58070D00385451 /* Login.swift in Sources */,
 				054FD24C1B578F900027C2DF /* Crypt.swift in Sources */,
-				054FD24B1B578F8C0027C2DF /* CK-Bridging-Header.h in Sources */,
 				054FD24A1B578F880027C2DF /* Util.swift in Sources */,
 				054FD2491B578F840027C2DF /* LocksmithRequest.swift in Sources */,
 				054FD2481B578F7F0027C2DF /* Locksmith.swift in Sources */,
@@ -505,7 +503,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "chat/CK-Bridging-Header.h";
-				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "chat/CK-Bridging-Header.h";
 			};
 			name = Debug;
 		};

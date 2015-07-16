@@ -82,6 +82,7 @@ class Login {
 #if os(iOS)
 
 extension Login {
+
     // popup the login alert
     func challenge() {
         
@@ -131,4 +132,16 @@ extension Login {
     }
 }
 
+#endif
+
+#if os(OSX)
+    
+extension Login {
+
+    // popup the login alert
+    func challenge() {
+        
+    }
+}
+    
 #endif
