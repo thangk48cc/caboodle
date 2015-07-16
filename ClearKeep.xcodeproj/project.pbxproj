@@ -18,11 +18,20 @@
 		053D91AB1B48D7DE00560B7F /* LocksmithRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053D91AA1B48D7DE00560B7F /* LocksmithRequest.swift */; };
 		054FD2431B56AE830027C2DF /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054FD2421B56AE830027C2DF /* Reachability.swift */; };
 		054FD2441B56AE830027C2DF /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054FD2421B56AE830027C2DF /* Reachability.swift */; };
+		054FD2451B578F640027C2DF /* Rest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05190D6E1B482AE4002F52F5 /* Rest.swift */; };
+		054FD2461B578F760027C2DF /* Roster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05190D6F1B482AE4002F52F5 /* Roster.swift */; };
+		054FD2471B578F7B0027C2DF /* Http.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05190D6B1B482AE4002F52F5 /* Http.swift */; };
+		054FD2481B578F7F0027C2DF /* Locksmith.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053D91A81B48D7C800560B7F /* Locksmith.swift */; };
+		054FD2491B578F840027C2DF /* LocksmithRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053D91AA1B48D7DE00560B7F /* LocksmithRequest.swift */; };
+		054FD24A1B578F880027C2DF /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05190D701B482AE4002F52F5 /* Util.swift */; };
+		054FD24B1B578F8C0027C2DF /* CK-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = 05190D7B1B4832E9002F52F5 /* CK-Bridging-Header.h */; };
+		054FD24C1B578F900027C2DF /* Crypt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05190D661B482AC8002F52F5 /* Crypt.swift */; };
 		058B29B51B4731910069C2D4 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058B29B41B4731910069C2D4 /* MasterViewController.swift */; };
 		058B29B71B4731910069C2D4 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058B29B61B4731910069C2D4 /* DetailViewController.swift */; };
 		058B29BA1B4731910069C2D4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 058B29B81B4731910069C2D4 /* Main.storyboard */; };
 		058B29BC1B4731910069C2D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058B29BB1B4731910069C2D4 /* Assets.xcassets */; };
 		058B29BF1B4731910069C2D4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 058B29BD1B4731910069C2D4 /* LaunchScreen.storyboard */; };
+		05B4B7E41B58070D00385451 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05190D6C1B482AE4002F52F5 /* Login.swift */; };
 		05D390391B56A6E600989EBE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D390381B56A6E600989EBE /* AppDelegate.swift */; };
 		05D3903B1B56A6E600989EBE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D3903A1B56A6E600989EBE /* ViewController.swift */; };
 		05D3903D1B56A6E600989EBE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05D3903C1B56A6E600989EBE /* Assets.xcassets */; };
@@ -107,7 +116,6 @@
 				058B29B81B4731910069C2D4 /* Main.storyboard */,
 				05190D681B482AE4002F52F5 /* AppDelegate.swift */,
 				058B29B61B4731910069C2D4 /* DetailViewController.swift */,
-				05190D6C1B482AE4002F52F5 /* Login.swift */,
 				058B29B41B4731910069C2D4 /* MasterViewController.swift */,
 			);
 			name = ios;
@@ -131,6 +139,7 @@
 			children = (
 				05190D661B482AC8002F52F5 /* Crypt.swift */,
 				05190D6B1B482AE4002F52F5 /* Http.swift */,
+				05190D6C1B482AE4002F52F5 /* Login.swift */,
 				053D91A81B48D7C800560B7F /* Locksmith.swift */,
 				053D91AA1B48D7DE00560B7F /* LocksmithRequest.swift */,
 				05190D6E1B482AE4002F52F5 /* Rest.swift */,
@@ -325,6 +334,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05B4B7E41B58070D00385451 /* Login.swift in Sources */,
+				054FD24C1B578F900027C2DF /* Crypt.swift in Sources */,
+				054FD24B1B578F8C0027C2DF /* CK-Bridging-Header.h in Sources */,
+				054FD24A1B578F880027C2DF /* Util.swift in Sources */,
+				054FD2491B578F840027C2DF /* LocksmithRequest.swift in Sources */,
+				054FD2481B578F7F0027C2DF /* Locksmith.swift in Sources */,
+				054FD2471B578F7B0027C2DF /* Http.swift in Sources */,
+				054FD2461B578F760027C2DF /* Roster.swift in Sources */,
+				054FD2451B578F640027C2DF /* Rest.swift in Sources */,
 				05D3903B1B56A6E600989EBE /* ViewController.swift in Sources */,
 				05D390391B56A6E600989EBE /* AppDelegate.swift in Sources */,
 				054FD2441B56AE830027C2DF /* Reachability.swift in Sources */,
@@ -486,6 +504,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ck.mac;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "chat/CK-Bridging-Header.h";
+				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "chat/CK-Bridging-Header.h";
 			};
 			name = Debug;
 		};
@@ -501,6 +521,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ck.mac;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "chat/CK-Bridging-Header.h";
 			};
 			name = Release;
 		};
