@@ -1,63 +1,69 @@
 #if os(iOS)
 import UIKit
 typealias ParentViewController = UIViewController
+typealias ParentTableView = UITableView
 #endif
 #if os(OSX)
 import Cocoa
 typealias ParentViewController = NSViewController
+    typealias ParentTableView = NSTableView
 #endif
 
 class Login {
 
     var parent:ParentViewController?
-    var callback:Callback?
+    var tableView:ParentTableView?
+    var pushToken: String?
 
-    private static var loginInstance: Login?
+    static let sharedInstance = Login()
 
-    init(parent:ParentViewController, callback:Callback) {
-        self.parent = parent
-        self.callback = callback
+    func setPushToken(token:NSData) {
+        self.pushToken = token.hexadecimalString
     }
     
-    class func config(parent:ParentViewController, callback:Callback) -> Login {
-        loginInstance = Login(parent: parent, callback:callback)
-        return loginInstance!
+    class func config(parent:ParentViewController, tableView:ParentTableView) {
+        Login.sharedInstance.parent = parent
+        Login.sharedInstance.tableView = tableView
     }
 
-    class var sharedInstance: Login {
-        if loginInstance == nil {
-            print("error: shared called before setup")
-        }
-        return loginInstance!
-    }
-    
-    typealias Callback = (success:Bool, friends:[String]?) -> Void;
-
-    static func popup(parent:ParentViewController, callback:Callback) {
+    static func popup(parent:ParentViewController, tableView:ParentTableView) {
         dispatch_async(dispatch_get_main_queue(),{
-            Login.config(parent, callback:callback).challenge()
+            Login.config(parent, tableView:tableView)
+            Login.sharedInstance.challenge()
         })
     }
 
     func authenticated(success:Bool, friends:[String]?) {
         if !success { // login failed
-            self.callback!(success:false, friends:nil)
             dispatch_async(dispatch_get_main_queue(),{
                 self.challenge()
             })
         }
-            
-        self.callback!(success:true, friends:friends)
+  
+        Roster.sharedInstance.set(friends)
+        self.tableView?.reloadData()
     }
 
     func register(username:String, password:String) {
-        Rest.sharedInstance.register(username, password: password, callback:authenticated)
+        Rest.sharedInstance.register(username, password:password, pushToken:self.pushToken!, callback:authenticated)
     }
 
     func login(username:String, password:String) {
-        Rest.sharedInstance.login(username, password: password, callback:authenticated)
+        Rest.sharedInstance.login(username, password: password, pushToken:self.pushToken!, callback:authenticated)
     }
 
+    func reauth() {
+        if self.pushToken == nil || self.parent == nil {
+            return
+        }
+        guard let creds = Login.loadCredentials() else {
+            print("missing creds in keychain")
+            Login.sharedInstance.reauthed(false, friends:nil)
+            return
+        }
+        self.login(creds.username, password: creds.password)
+    }
+    
     static func saveCredentials(username:String, password:String) {
         do {
             try Locksmith.updateData(["username": username, "password": password], forUserAccount: "ClearKeep")
@@ -77,6 +83,26 @@ class Login {
         return (u as! String, p as! String)
     }
     
+    func reauthed(success:Bool, friends:[String]?) {
+        if success {
+            Roster.sharedInstance.set(friends)
+            self.tableView?.reloadData()
+        } else {
+            self.challenge()
+        }
+    }
+    
+    func logout() {
+        
+        Rest.sharedInstance.logout()
+        do {
+            try Locksmith.deleteDataForUserAccount("ClearKeep")
+        } catch let error as NSError {
+            print("could not remove from keychain: " + String(error))
+        }
+        
+        self.challenge()
+    }
 }
 
 #if os(iOS)

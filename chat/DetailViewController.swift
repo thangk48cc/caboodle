@@ -77,9 +77,7 @@ class DetailViewController: UIViewController {
     
     @IBAction func unfriend(sender: AnyObject) {
         
-        Rest.sharedInstance.befriend((peer?.username)!, foreva:false, callback: {
-            self.master!.rosterUpdate($0)
-        });
+        Rest.sharedInstance.befriend((peer?.username)!, foreva:false, tableView:self.master!.tableView);
         navigationController!.popViewControllerAnimated(true)
     }
     

@@ -24,21 +24,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         let settings = UIUserNotificationSettings(forTypes: .Alert, categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(settings)
 
-        HttpHelper.monitorReachability(Rest.sharedInstance.serverAddress)
-        
         return true
     }
     
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-        Rest.sharedInstance.setPushToken(deviceToken)
+        Login.sharedInstance.setPushToken(deviceToken)
         print("Got token data! \(deviceToken)")
-        Rest.sharedInstance.reauth()
+        Login.sharedInstance.reauth()
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
-        Rest.sharedInstance.pushToken = "simulator"
+        Login.sharedInstance.pushToken = "simulator"
         print("Couldn't register: \(error)")
-        Rest.sharedInstance.reauth()
+        Login.sharedInstance.reauth()
     }
 
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {

@@ -68,19 +68,4 @@ class HttpHelper {
         
         task!.resume()
     }
-    
-    class func monitorReachability(serverAddress:String) {
-//        let reachability = Reachability.reachabilityForInternetConnection()
-        if let reachability = Reachability(hostname:serverAddress) {
-            reachability.whenReachable = { reachability in
-                print("reachable")
-            }
-            reachability.whenUnreachable = { reachability in
-                print("Not reachable")
-            }
-            reachability.startNotifier()
-        } else {
-            print("reachability can't even")
-        }
-    }
 }

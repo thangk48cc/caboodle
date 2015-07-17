@@ -21,19 +21,15 @@ class MasterViewController: UITableViewController {
         self.tableView.backgroundView = nil;
         self.tableView.backgroundColor = UIColor.blackColor();
         
-//        let initialIndexPath = NSIndexPath(forRow: 1, inSection: 0)
-//        self.performSegueWithIdentifier("showDetail", sender: initialIndexPath)
+        Login.config(self, tableView:self.tableView)
+        Login.sharedInstance.reauth()
     }
 
     override func viewWillAppear(animated: Bool) {
         self.clearsSelectionOnViewWillAppear = self.splitViewController!.collapsed
         super.viewWillAppear(animated)
         MasterViewController.theMaster = self
-        Rest.sharedInstance.reauth(reauthed)
-        
-        
-//        let initialIndexPath = NSIndexPath(forRow: 1, inSection: 0)
-//        self.tableView.selectRowAtIndexPath(initialIndexPath, animated: true, scrollPosition:UITableViewScrollPosition.None)
+        Login.sharedInstance.reauth()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -41,32 +37,10 @@ class MasterViewController: UITableViewController {
         MasterViewController.theMaster = nil
     }
 
-    func reauthed(success:Bool, friends:[String]?) {
-        if success {
-            self.rosterUpdate(friends)
-        } else {
-            self.loginPopup()
-        }
-    }
-
-    func rosterUpdate(friends:[String]?) {
-        Roster.sharedInstance.set(friends)
-        dispatch_async(dispatch_get_main_queue(),{
-            self.tableView.reloadData();
-        })
-    }
-
-    func loginPopup() {
-        Login.popup(self.parentViewController!, callback: {
-            self.rosterUpdate($1)
-        });
-    }
-
     func logout(sender: AnyObject) {
-        Rest.sharedInstance.logout()
-        self.loginPopup()
+        Login.sharedInstance.logout()
     }
-
+    
     func insertNewObject(sender: AnyObject) {
         let alertController = UIAlertController(title: "Add a friend", message: "Enter your friend's username'", preferredStyle: .Alert)
     
@@ -76,9 +50,7 @@ class MasterViewController: UITableViewController {
 
         let befriendAction = UIAlertAction(title: "Add", style: .Default) { (_) in
             let username = userInput();
-            Rest.sharedInstance.befriend(username, foreva:true, callback: {
-                self.rosterUpdate($0)
-            });
+            Rest.sharedInstance.befriend(username, foreva:true, tableView:self.tableView);
         }
         befriendAction.enabled = false
         
@@ -135,20 +107,6 @@ class MasterViewController: UITableViewController {
             self.tableView.reloadData()
         }
     }
-
-//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-//    
-//        if segue.identifier == "showDetail" {
-//            if let indexPath = self.tableView.indexPathForSelectedRow {
-//                let object = Roster.sharedInstance.contacts[indexPath.row]
-//                let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
-//                controller.master = self
-//                controller.peer = object
-//                controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
-//                controller.navigationItem.leftItemsSupplementBackButton = true
-//            }
-//        }
-//    }
 
     // MARK: - Table View
 

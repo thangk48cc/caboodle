@@ -15,13 +15,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func application(application: NSApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         Rest.sharedInstance.setPushToken(deviceToken)
         print("Got token data! \(deviceToken)")
-        Rest.sharedInstance.reauth()
+        Login.sharedInstance.reauth()
     }
     
     func application(application: NSApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
         Rest.sharedInstance.pushToken = "simulator"
         print("Couldn't register: \(error)")
-        Rest.sharedInstance.reauth()
+        Login.sharedInstance.reauth()
     }
 
     func application(application: NSApplication, didReceiveRemoteNotification userInfo: [String : AnyObject]) {
