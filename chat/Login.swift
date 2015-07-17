@@ -109,8 +109,14 @@ class Login {
 
 extension Login {
 
-    // popup the login alert
     func challenge() {
+        dispatch_async(dispatch_get_main_queue(),{
+            self.parent!.performSegueWithIdentifier("LoginSegue", sender: nil)
+        })
+    }
+    
+    // popup the login alert
+    func xchallenge() {
         
         let alertController = UIAlertController(title: "Welcome to Chat", message: "Enter your credentials", preferredStyle: .Alert)
         
