@@ -6,7 +6,7 @@ typealias ParentTableView = UITableView
 #if os(OSX)
 import Cocoa
 typealias ParentViewController = NSViewController
-    typealias ParentTableView = NSTableView
+typealias ParentTableView = NSTableView
 #endif
 
 class Login {
@@ -166,6 +166,8 @@ extension Login {
 
     // popup the login alert
     func challenge() {
+        let lp = LoginPrompt(windowNibName: "LoginPrompt")
+        self.parent!.view.window?.beginSheet(lp.window!, completionHandler:nil)
     }
 }
     

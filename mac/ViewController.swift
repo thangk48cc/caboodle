@@ -22,8 +22,8 @@ class ViewController: NSViewController,NSTableViewDelegate {
     
     override func viewDidAppear() {
 
-        let mdlwin = LoginPrompt(windowNibName: "LoginPrompt")
-        self.view.window?.beginSheet(mdlwin.window!, completionHandler:nil)
+//        let mdlwin = LoginPrompt(windowNibName: "LoginPrompt")
+//        self.view.window?.beginSheet(mdlwin.window!, completionHandler:nil)
     }
 }
 
