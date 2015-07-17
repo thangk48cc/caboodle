@@ -3,6 +3,8 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
+    var mdlwin = LoginPrompt(windowNibName: "LoginPrompt")
+
     func applicationDidFinishLaunching(aNotification: NSNotification) {
 
         // register for push notifications
@@ -11,15 +13,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         application?.registerForRemoteNotificationTypes(myTypes)
     }
     
-    
     func application(application: NSApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-        Rest.sharedInstance.setPushToken(deviceToken)
+        Login.sharedInstance.setPushToken(deviceToken)
         print("Got token data! \(deviceToken)")
         Login.sharedInstance.reauth()
     }
     
     func application(application: NSApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
-        Rest.sharedInstance.pushToken = "simulator"
+        Login.sharedInstance.pushToken = "simulator"
         print("Couldn't register: \(error)")
         Login.sharedInstance.reauth()
     }

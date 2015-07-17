@@ -166,7 +166,6 @@ extension Login {
 
     // popup the login alert
     func challenge() {
-        
     }
 }
     
