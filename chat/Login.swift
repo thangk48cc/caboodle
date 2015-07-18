@@ -9,6 +9,15 @@ typealias ParentViewController = NSViewController
 typealias ParentTableView = NSTableView
 #endif
 
+/*
+ *  Login
+ *
+ *  flow:
+ *      1) App UI launches, saves controller and tableView in Login.sharedInstance.config()
+ *      2) AppDelegate gets push token, saves in Login.sharedInstance.setPushToken(), then calls .reauth()
+ *      3) .reauth() loads creds, makes HTTP POST, calls .authenticated() with result
+ *      4) .authenticated() either loads the contact list into UI if success, else calls .challenge()
+ */
 class Login {
 
     var parent:ParentViewController?
@@ -26,22 +35,16 @@ class Login {
         Login.sharedInstance.tableView = tableView
     }
 
-    static func popup(parent:ParentViewController, tableView:ParentTableView) {
-        dispatch_async(dispatch_get_main_queue(),{
-            Login.config(parent, tableView:tableView)
-            Login.sharedInstance.challenge()
-        })
-    }
-
-    func authenticated(success:Bool, friends:[String]?) {
-        if !success { // login failed
-            dispatch_async(dispatch_get_main_queue(),{
-                self.challenge()
-            })
+    func reauth() {
+        if self.pushToken == nil || self.parent == nil {
+            return
         }
-  
-        Roster.sharedInstance.set(friends)
-        self.tableView?.reloadData()
+        guard let creds = Login.loadCredentials() else {
+            print("missing creds in keychain")
+            self.challenge()
+          return
+        }
+        self.login(creds.username, password: creds.password)
     }
 
     func register(username:String, password:String) {
@@ -52,18 +55,17 @@ class Login {
         Rest.sharedInstance.login(username, password: password, pushToken:self.pushToken!, callback:authenticated)
     }
 
-    func reauth() {
-        if self.pushToken == nil || self.parent == nil {
-            return
+    func authenticated(success:Bool, friends:[String]?) {
+        if !success { // login failed
+            dispatch_async(dispatch_get_main_queue(),{
+                self.challenge()
+            })
         }
-        guard let creds = Login.loadCredentials() else {
-            print("missing creds in keychain")
-            Login.sharedInstance.reauthed(false, friends:nil)
-            return
-        }
-        self.login(creds.username, password: creds.password)
+        
+        Roster.sharedInstance.set(friends)
+        self.tableView?.reloadData()
     }
-    
+
     static func saveCredentials(username:String, password:String) {
         do {
             try Locksmith.updateData(["username": username, "password": password], forUserAccount: "ClearKeep")
@@ -82,16 +84,7 @@ class Login {
         }
         return (u as! String, p as! String)
     }
-    
-    func reauthed(success:Bool, friends:[String]?) {
-        if success {
-            Roster.sharedInstance.set(friends)
-            self.tableView?.reloadData()
-        } else {
-            self.challenge()
-        }
-    }
-    
+
     func logout() {
         
         Rest.sharedInstance.logout()
@@ -114,54 +107,6 @@ extension Login {
             self.parent!.performSegueWithIdentifier("LoginSegue", sender: nil)
         })
     }
-    
-    // popup the login alert
-    func xchallenge() {
-        
-        let alertController = UIAlertController(title: "Welcome to Chat", message: "Enter your credentials", preferredStyle: .Alert)
-        
-        func userInput() -> (username:String, password:String) {
-            let username = alertController.textFields![0].text
-            let password = alertController.textFields![1].text
-            return (username!, password!);
-        }
-        
-        let loginAction = UIAlertAction(title: "Login", style: .Default) { (_) in
-            let credentials = userInput();
-            self.login(credentials.username, password:credentials.password)
-        }
-        loginAction.enabled = false
-        
-        let registerAction = UIAlertAction(title: "Create Account", style: .Default) { (_) in
-            let credentials = userInput();
-            self.register(credentials.username, password:credentials.password)
-        }
-        registerAction.enabled = false
-        
-        func configureTextField(textField:UITextField, placeholder:String) {
-            textField.placeholder = placeholder
-            NSNotificationCenter.defaultCenter().addObserverForName(UITextFieldTextDidChangeNotification, object: textField, queue: NSOperationQueue.mainQueue()) { (notification) in
-                let credentials = userInput();
-                let enabled = credentials.username != "" && credentials.password != ""
-                loginAction.enabled = enabled
-                registerAction.enabled = enabled
-            }
-        }
-        
-        alertController.addTextFieldWithConfigurationHandler { (textField) in
-            configureTextField(textField, placeholder: "Username");
-        }
-        
-        alertController.addTextFieldWithConfigurationHandler { (textField) in
-            configureTextField(textField, placeholder: "Password");
-            textField.secureTextEntry = true
-        }
-        
-        alertController.addAction(loginAction)
-        alertController.addAction(registerAction)
-        
-        self.parent!.presentViewController(alertController, animated: true, completion: nil);
-    }
 }
 
 #endif
@@ -170,11 +115,12 @@ extension Login {
     
 extension Login {
 
-    // popup the login alert
     func challenge() {
-        let lp = LoginPrompt(windowNibName: "LoginPrompt")
-        self.parent!.view.window?.beginSheet(lp.window!, completionHandler:nil)
+        let lp = LoginWindowController(windowNibName: "LoginWindowController")
+        let passwordSheet = lp.window!
+        let iret = NSApplication.sharedApplication().runModalForWindow(passwordSheet)
+        NSLog("password dialog returned = %ld", iret);
     }
 }
-    
+
 #endif

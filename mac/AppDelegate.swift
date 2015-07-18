@@ -3,8 +3,6 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    var mdlwin = LoginPrompt(windowNibName: "LoginPrompt")
-
     func applicationDidFinishLaunching(aNotification: NSNotification) {
 
         // register for push notifications
