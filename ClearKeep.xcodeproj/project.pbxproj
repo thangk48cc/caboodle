@@ -15,12 +15,10 @@
 		05190D781B482AE4002F52F5 /* Roster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05190D6F1B482AE4002F52F5 /* Roster.swift */; };
 		05190D791B482AE4002F52F5 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05190D701B482AE4002F52F5 /* Util.swift */; };
 		053D91A91B48D7C800560B7F /* Locksmith.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053D91A81B48D7C800560B7F /* Locksmith.swift */; };
-		053D91AB1B48D7DE00560B7F /* LocksmithRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053D91AA1B48D7DE00560B7F /* LocksmithRequest.swift */; };
 		054FD2451B578F640027C2DF /* Rest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05190D6E1B482AE4002F52F5 /* Rest.swift */; };
 		054FD2461B578F760027C2DF /* Roster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05190D6F1B482AE4002F52F5 /* Roster.swift */; };
 		054FD2471B578F7B0027C2DF /* Http.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05190D6B1B482AE4002F52F5 /* Http.swift */; };
 		054FD2481B578F7F0027C2DF /* Locksmith.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053D91A81B48D7C800560B7F /* Locksmith.swift */; };
-		054FD2491B578F840027C2DF /* LocksmithRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053D91AA1B48D7DE00560B7F /* LocksmithRequest.swift */; };
 		054FD24A1B578F880027C2DF /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05190D701B482AE4002F52F5 /* Util.swift */; };
 		054FD24C1B578F900027C2DF /* Crypt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05190D661B482AC8002F52F5 /* Crypt.swift */; };
 		058B29B51B4731910069C2D4 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058B29B41B4731910069C2D4 /* MasterViewController.swift */; };
@@ -49,7 +47,6 @@
 		05190D701B482AE4002F52F5 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		05190D7B1B4832E9002F52F5 /* CK-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CK-Bridging-Header.h"; sourceTree = "<group>"; };
 		053D91A81B48D7C800560B7F /* Locksmith.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locksmith.swift; sourceTree = "<group>"; };
-		053D91AA1B48D7DE00560B7F /* LocksmithRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocksmithRequest.swift; sourceTree = "<group>"; };
 		058B29AF1B4731910069C2D4 /* ClearKeep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClearKeep.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		058B29B41B4731910069C2D4 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
 		058B29B61B4731910069C2D4 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
@@ -146,7 +143,6 @@
 				05190D6B1B482AE4002F52F5 /* Http.swift */,
 				05190D6C1B482AE4002F52F5 /* Login.swift */,
 				053D91A81B48D7C800560B7F /* Locksmith.swift */,
-				053D91AA1B48D7DE00560B7F /* LocksmithRequest.swift */,
 				05190D6E1B482AE4002F52F5 /* Rest.swift */,
 				05190D6F1B482AE4002F52F5 /* Roster.swift */,
 				05190D701B482AE4002F52F5 /* Util.swift */,
@@ -325,7 +321,6 @@
 				05190D671B482AC8002F52F5 /* Crypt.swift in Sources */,
 				05190D781B482AE4002F52F5 /* Roster.swift in Sources */,
 				058B29B71B4731910069C2D4 /* DetailViewController.swift in Sources */,
-				053D91AB1B48D7DE00560B7F /* LocksmithRequest.swift in Sources */,
 				058B29B51B4731910069C2D4 /* MasterViewController.swift in Sources */,
 				05190D711B482AE4002F52F5 /* AppDelegate.swift in Sources */,
 				05190D791B482AE4002F52F5 /* Util.swift in Sources */,
@@ -343,7 +338,6 @@
 				05AA2CFC1B5A997B00AF8199 /* LoginWindowController.swift in Sources */,
 				054FD24C1B578F900027C2DF /* Crypt.swift in Sources */,
 				054FD24A1B578F880027C2DF /* Util.swift in Sources */,
-				054FD2491B578F840027C2DF /* LocksmithRequest.swift in Sources */,
 				054FD2481B578F7F0027C2DF /* Locksmith.swift in Sources */,
 				054FD2471B578F7B0027C2DF /* Http.swift in Sources */,
 				054FD2461B578F760027C2DF /* Roster.swift in Sources */,

@@ -56,7 +56,10 @@ class Login {
     }
 
     func authenticated(success:Bool, friends:[String]?) {
-        if !success { // login failed
+
+        if success {
+            self.welcome()
+        } else {
             dispatch_async(dispatch_get_main_queue(),{
                 self.challenge()
             })
@@ -107,6 +110,10 @@ extension Login {
             self.parent!.performSegueWithIdentifier("LoginSegue", sender: nil)
         })
     }
+    
+    func welcome() {
+        LoginViewController.theLoginScreen?.dismissViewControllerAnimated(true, completion:nil)
+    }
 }
 
 #endif
@@ -120,6 +127,10 @@ extension Login {
         let passwordSheet = lp.window!
         let iret = NSApplication.sharedApplication().runModalForWindow(passwordSheet)
         NSLog("password dialog returned = %ld", iret);
+    }
+
+    func welcome() {
+        LoginWindowController.theLoginScreen?.close()
     }
 }
 
