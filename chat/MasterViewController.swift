@@ -75,7 +75,6 @@ class MasterViewController: UITableViewController {
     
     // MARK: - Segues
 
-    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "showDetail" {

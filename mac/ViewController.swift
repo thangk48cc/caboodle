@@ -10,20 +10,24 @@ class ViewController: NSViewController,NSTableViewDelegate {
     @IBOutlet weak var entry: NSTextField!
     @IBOutlet weak var tableView: NSTableView!
 
-    var mainW: NSWindow = NSWindow()
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.setDelegate(self)
 
         Login.config(self, tableView:self.tableView)
         Login.sharedInstance.reauth()
     }
     
-    override func viewDidAppear() {
+    func tableViewSelectionDidChange(notification:NSNotification) {
 
-//        let mdlwin = LoginPrompt(windowNibName: "LoginPrompt")
-//        self.view.window?.beginSheet(mdlwin.window!, completionHandler:nil)
+        let row = self.tableView.selectedRow
+        let peer = Roster.sharedInstance.contacts[row]
+        Rest.sharedInstance.load(peer.username, callback: {
+            if let loaded = $0 {
+                dispatch_async(dispatch_get_main_queue(),{
+                    self.transcript.string = loaded
+                })
+            }
+        })
     }
 }
 
