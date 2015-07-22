@@ -2,10 +2,19 @@ import Cocoa
 
 class ViewController: NSViewController,NSTableViewDelegate {
 
+    var peer : Contact?
+
     @IBOutlet weak var caller: NSButton!
     @IBOutlet var transcript: NSTextView!
 
     @IBAction func call(sender: AnyObject) {}
+    @IBAction func sendText(sender: AnyObject) {
+        Rest.sharedInstance.send(self.peer!.username, message: self.entry.stringValue, callback: {
+            if !$0 {
+                print("error sending " + $1)
+            }
+        })
+    }
     
     @IBOutlet weak var entry: NSTextField!
     @IBOutlet weak var tableView: NSTableView!
@@ -20,8 +29,8 @@ class ViewController: NSViewController,NSTableViewDelegate {
     func tableViewSelectionDidChange(notification:NSNotification) {
 
         let row = self.tableView.selectedRow
-        let peer = Roster.sharedInstance.contacts[row]
-        Rest.sharedInstance.load(peer.username, callback: {
+        self.peer = Roster.sharedInstance.contacts[row]
+        Rest.sharedInstance.load(peer!.username, callback: {
             if let loaded = $0 {
                 dispatch_async(dispatch_get_main_queue(),{
                     self.transcript.string = loaded
