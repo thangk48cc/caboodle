@@ -5,7 +5,8 @@ class Rest {
     
     enum Status { case Ok, NotFound }
     
-    let serverAddress = "http://127.0.0.1:3000/"
+    let serverAddress = "http://208.52.170.163:3000/"
+    //let serverAddress = "http://127.0.0.1:3000/"
     //let serverAddress = "http://45.55.12.220:3000/"
 
     static let sharedInstance = Rest()
