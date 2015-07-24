@@ -1,15 +1,15 @@
 import UIKit
 
-class DetailViewController: UIViewController {
-
+class DetailViewController: UIViewController,UIScrollViewDelegate,UITextFieldDelegate{
+    
     var master: MasterViewController?
     var peer: Contact?
     var originalTranscriptFrame: CGRect?
     var originalEntryFrame: CGRect?
-
+    
     static var theDetail : DetailViewController?
     
-
+    
     @IBOutlet weak var bar: UINavigationItem!
     @IBOutlet weak var transcript: UITextView!
     @IBOutlet weak var entryBottom: NSLayoutConstraint!
@@ -21,17 +21,33 @@ class DetailViewController: UIViewController {
         DetailViewController.theDetail = self
         self.bar.title = peer?.username
         Roster.sharedInstance.clear(peer!.username)
-        self.entry.addTarget(self, action: "send:", forControlEvents: .EditingDidEndOnExit)
-        
         Rest.sharedInstance.load((peer?.username)!, callback: {
             if let loaded = $0 {
                 dispatch_async(dispatch_get_main_queue(),{
                     self.transcript.text = loaded
+                    
+                    //scroll to bottom in textView
+                    self.scrollTextViewToBottom();
                 })
             }
         })
+        
+        entry.delegate = self;
+        transcript.layoutManager.allowsNonContiguousLayout = false;
     }
-
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        send();
+        return true;
+    }
+    
+    func scrollTextViewToBottom() {
+        UIView.setAnimationsEnabled(false);
+        let bottom : NSRange = NSMakeRange(transcript.text.characters.count + 10, 1);
+        transcript.scrollRangeToVisible(bottom);
+        UIView.setAnimationsEnabled(true);
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
         self.registerForKeyboardNotifications()
@@ -42,9 +58,8 @@ class DetailViewController: UIViewController {
         DetailViewController.theDetail = nil
         self.deregisterFromKeyboardNotifications()
     }
-
-    @IBAction func send(sender: AnyObject) {
-        
+    
+    func send() {
         Rest.sharedInstance.send((peer?.username)!, message: self.entry.text!, callback: {
             if !$0 {
                 print("error sending " + $1)
@@ -55,15 +70,16 @@ class DetailViewController: UIViewController {
         self.entry.text?.removeAll()
         
         Rest.sharedInstance.store((peer?.username)!, value: transcript.text)
+        scrollTextViewToBottom();
     }
     
     @IBAction func call(sender: AnyObject) {
         let receiver = (peer?.username)!
         Rest.sharedInstance.call(receiver, callback:{
-           print("call success " + String($0) + " " + String($1))
+            print("call success " + String($0) + " " + String($1))
         });
     }
-
+    
     func incoming(userInfo: [NSObject : AnyObject]) {
         NSLog("detail incoming " + String(userInfo.dynamicType) + " : " + userInfo.description)
         let from = userInfo["from"] as! String
@@ -72,6 +88,7 @@ class DetailViewController: UIViewController {
             let update = self.transcript.text + "\n" + from + ": " + message
             self.transcript.text = update
             Rest.sharedInstance.store((peer?.username)!, value: transcript.text)
+            scrollTextViewToBottom();
         }
     }
     
@@ -91,9 +108,10 @@ class DetailViewController: UIViewController {
         center.removeObserver(self, name: UIKeyboardDidHideNotification, object: nil)
         center.removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
     }
-
+    
     func keyboardWillShow(notification: NSNotification) {
         self.updateBottomLayoutConstraintWithNotification(notification)
+        scrollTextViewToBottom();
     }
     
     func updateBottomLayoutConstraintWithNotification(notification: NSNotification) {
@@ -108,11 +126,12 @@ class DetailViewController: UIViewController {
         
         UIView.animateWithDuration(animationDuration, delay:0.0, options:[.BeginFromCurrentState, animationCurve], animations:{
             self.view.layoutIfNeeded()
-        }, completion: nil)
+            }, completion: nil)
     }
     
     func keyboardWillBeHidden(notification: NSNotification) {
         NSLog("keyboardWillBeHidden")
         // todo
+        scrollTextViewToBottom();
     }
 }

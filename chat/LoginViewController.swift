@@ -22,7 +22,7 @@ class LoginViewController: UIViewController,LoginDelegate {
         let touch = UITapGestureRecognizer(target: self, action: "handleTap");
         view.addGestureRecognizer(touch);
         
-        //Login.sharedInstance.delegate = self;
+        Login.sharedInstance.delegate = self;
     }
     
     func handleTap() {
