@@ -1,14 +1,14 @@
 import UIKit
 
-class MasterViewController: UITableViewController {
-
+class MasterViewController: UITableViewController,UIAlertViewDelegate,RestDelegete {
+    
     static var theMaster : MasterViewController?
-
+    
     var detailViewController: DetailViewController? = nil
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         let logoutButton = UIBarButtonItem(title:"Logout", style:UIBarButtonItemStyle.Plain, target:self, action:"logout:")
         self.navigationItem.leftBarButtonItem = logoutButton
         
@@ -18,36 +18,44 @@ class MasterViewController: UITableViewController {
             let controllers = split.viewControllers
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
         }
+        self.tableView.dataSource = self;
         self.tableView.backgroundView = nil;
         self.tableView.backgroundColor = UIColor.blackColor();
         
         Login.config(self, tableView:self.tableView)
         Login.sharedInstance.reauth()
+        Rest.sharedInstance.delegate = self;
     }
-
+    
     override func viewWillAppear(animated: Bool) {
         self.clearsSelectionOnViewWillAppear = self.splitViewController!.collapsed
         super.viewWillAppear(animated)
         MasterViewController.theMaster = self
-        Login.sharedInstance.reauth()
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(true)
         MasterViewController.theMaster = nil
     }
-
+    
     func logout(sender: AnyObject) {
-        Login.sharedInstance.logout()
+        let alertView : UIAlertView = UIAlertView(title: "", message: "Do you want to logout?", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "OK");
+        alertView.show();
+    }
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        if (buttonIndex == 1) {
+            Login.sharedInstance.logout()
+        }
     }
     
     func insertNewObject(sender: AnyObject) {
         let alertController = UIAlertController(title: "Add a friend", message: "Enter your friend's username'", preferredStyle: .Alert)
-    
+        
         func userInput() -> String {
             return alertController.textFields![0].text!
         }
-
+        
         let befriendAction = UIAlertAction(title: "Add", style: .Default) { (_) in
             let username = userInput();
             Rest.sharedInstance.befriend(username, foreva:true, tableView:self.tableView);
@@ -63,24 +71,25 @@ class MasterViewController: UITableViewController {
                 befriendAction.enabled = enabled
             }
         }
-
+        
         alertController.addTextFieldWithConfigurationHandler { (textField) in
             configureTextField(textField, placeholder: "Username");
         }
         alertController.addAction(befriendAction)
+        alertController.addAction(cancelAction)
         
         self.presentViewController(alertController, animated: true, completion: nil);
     }
-
+    
     
     // MARK: - Segues
-
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "showDetail" {
-
+            
             var row = -1
-
+            
             if (sender!.isKindOfClass(UITableViewCell)) {
                 row = (self.tableView.indexPathForSelectedRow?.row)!
             } else if (sender!.isKindOfClass(NSIndexPath)) {
@@ -88,16 +97,25 @@ class MasterViewController: UITableViewController {
             } else {
                 assert(false)
             }
-
+            
             let object = Roster.sharedInstance.contacts[row]
             let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
             controller.master = self
             controller.peer = object
             controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
             controller.navigationItem.leftItemsSupplementBackButton = true
+        } else if segue.identifier == "messages" {
+            
         }
     }
-
+    
+    //function show message error when add friend
+    func registerFriendFall() {
+        let alertView : UIAlertView = UIAlertView(title: "Error Add Friend", message: "Already existed in list or doesn't exist in system", delegate: self, cancelButtonTitle: "OK");
+        alertView.show();
+        
+    }
+    
     func incoming(userInfo: [NSObject : AnyObject]) {
         NSLog("Master incoming " + String(userInfo.dynamicType) + " : " + userInfo.description)
         let from = userInfo["from"] as! String
@@ -106,18 +124,19 @@ class MasterViewController: UITableViewController {
             self.tableView.reloadData()
         }
     }
-
+    
     // MARK: - Table View
-
+    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
-
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         print("# rows: " + Roster.sharedInstance.contacts.count)
         return Roster.sharedInstance.contacts.count
     }
-
+    
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
         let contact = Roster.sharedInstance.contacts[indexPath.row]
@@ -127,12 +146,12 @@ class MasterViewController: UITableViewController {
         cell.backgroundColor = UIColor.blackColor()
         return cell
     }
-
+    
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return false
     }
-
+    
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             Roster.sharedInstance.contacts.removeAtIndex(indexPath.row)
