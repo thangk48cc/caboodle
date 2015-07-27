@@ -50,14 +50,49 @@ if (!Array.prototype.forEach)
    };
 }
 
+if (!Array.prototype.map)
+{
+   Array.prototype.map = function(fun /*, thisp*/)
+   {
+      var len = this.length;
+      
+      if (typeof fun != "function")
+      throw new TypeError();
+      
+      var res = new Array(len);
+      var thisp = arguments[1];
+      
+      for (var i = 0; i < len; i++)
+      {
+         if (i in this)
+         res[i] = fun.call(thisp, this[i], i, this);
+      }
+      return res;
+   };
+}
+
+
 // apns
 
+/*
 var options = { cert: 'cert.pem',
     key: 'key.pem',
     passphrase: '1234',
     production: false
 };
 var apnConnection = new apn.Connection(options);
+*/
+
+function apnConnection(platform) {
+    var options = { cert: platform+'cert.pem',
+        key: platform+'key.pem',
+        passphrase: '1234',
+        production: false
+    };
+    return new apn.Connection(options);
+}
+
+var apnConnections = ['ios','osx'].map(apnConnection)
 
 var tokens = {};
 
@@ -150,6 +185,7 @@ app.post('/login', bodyParser.json(), function (req, res) {
 
 function authenticated(req, res, who, person) {
     req.session.username = req.body.username;
+    req.session.platform = req.body.platform
     res.json(person.friends);
     tokenAdd(who, req.body.pushToken)
 }
@@ -216,7 +252,7 @@ app.post('/push', bodyParser.json(), function (req, res) {
     apnConnection.pushNotification(note, device);
 });
 
-function push(token, payload) {
+function push(platform, token, payload) {
 
     console.log('push to ---' + token + '---')
 
@@ -228,7 +264,7 @@ function push(token, payload) {
     note.alert = "\uD83D\uDCE7 \u2709 You have a new message";
     note.payload = payload;
   
-    apnConnection.pushNotification(note, device);
+    apnConnection[platform].pushNotification(note, device);
 }
 
 app.post('/send', bodyParser.json(), function (req, res) { 

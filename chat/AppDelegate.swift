@@ -28,13 +28,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     }
     
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-        Login.sharedInstance.setPushToken(deviceToken)
+        Rest.sharedInstance.setPushToken(deviceToken)
         print("Got token data! \(deviceToken)")
         Login.sharedInstance.reauth()
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
-        Login.sharedInstance.pushToken = "simulator"
+        Rest.sharedInstance.pushToken = "simulator"
         print("Couldn't register: \(error)")
         Login.sharedInstance.reauth()
     }
@@ -53,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             NSLog("\topened from a remote push notification when the app was on background: " + userInfo.description)
         } else {
             MasterViewController.theMaster?.incoming(userInfo)
-            DetailViewController.theDetail?.incoming(userInfo)
+            MessagesViewController.theDetail?.incoming(userInfo)
         }
     }
     
@@ -65,17 +65,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         }
     }
 
+    
     // MARK: - Split view
-
+    
     func splitViewController(splitViewController: UISplitViewController, collapseSecondaryViewController secondaryViewController:UIViewController, ontoPrimaryViewController primaryViewController:UIViewController) -> Bool {
         guard let secondaryAsNavController = secondaryViewController as? UINavigationController else { return false }
-        guard let topAsDetailController = secondaryAsNavController.topViewController as? DetailViewController else { return false }
+        guard let topAsDetailController = secondaryAsNavController.topViewController as? MessagesViewController else { return false }
         if topAsDetailController.peer == nil {
             // Return true to indicate that we have handled the collapse by doing nothing; the secondary controller will be discarded.
             return true
         }
         return false
     }
-
 }
 

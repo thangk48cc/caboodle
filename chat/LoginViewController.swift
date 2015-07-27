@@ -66,12 +66,14 @@ class LoginViewController: UIViewController,LoginDelegate {
     }
     
     @IBAction func login(sender: AnyObject) {
+        HttpHelper.showProgress();
         loginButton.selected = true;
         signupButton.selected = false;
         Login.sharedInstance.login(username.text!, password: password.text!)
     }
     
     @IBAction func signup(sender: AnyObject) {
+        HttpHelper.showProgress();
         loginButton.selected = false;
         signupButton.selected = true;
         Login.sharedInstance.register(username.text!, password: password.text!)
